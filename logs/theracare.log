@@ -6716,3 +6716,5 @@ RuntimeError: You called this URL via POST, but the URL doesn't end in a slash a
 ERROR 2026-01-13 21:46:23,149 basehttp 81861 123145467531264 "POST /api/audit/logs/batch HTTP/1.1" 500 82463
 INFO 2026-01-13 21:55:58,257 basehttp 81861 123145467531264 "GET /api/auth/ HTTP/1.1" 200 1339
 INFO 2026-01-13 21:55:58,278 basehttp 81861 123145467531264 "GET /api/auth/ HTTP/1.1" 200 1339
+INFO 2026-01-13 22:22:55,438 autoreload 81861 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-13 22:22:56,904 autoreload 48300 140704361279744 Watching for file changes with StatReloader

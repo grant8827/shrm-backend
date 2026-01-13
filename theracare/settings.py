@@ -83,7 +83,7 @@ ASGI_APPLICATION = 'theracare.asgi.application'
 # Database
 DATABASES = {
     'default': dj_database_url.parse(
-        config('DATABASE_URL', default=f'sqlite:///{BASE_DIR}/db.sqlite3')
+        config('DATABASE_URL', default='postgresql://postgres:cIEHVGVBrmKtceHzOhyiNeBNCOJxdWma@gondola.proxy.rlwy.net:16249/railway')
     )
 }
 
