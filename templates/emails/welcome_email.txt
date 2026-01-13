@@ -1,0 +1,27 @@
+Welcome to TheraCare EHR System!
+
+Hello {{ user.get_full_name }},
+
+Your {{ user.get_role_display }} account has been successfully created in the TheraCare EHR System.
+
+Login Information:
+- Username: {{ user.username }}
+- Email: {{ user.email }}
+- Role: {{ user.get_role_display }}
+
+To get started, please visit: {{ login_url }}
+
+Important Security Notes:
+- Please log in and change your password if this is a temporary password
+- Never share your login credentials with anyone
+- Always log out when finished using the system
+- Report any suspicious activity immediately
+
+For support, please contact your system administrator.
+
+Best regards,
+TheraCare EHR Team
+
+---
+This is an automated message. Please do not reply to this email.
+For HIPAA compliance, all system access is logged and monitored.
