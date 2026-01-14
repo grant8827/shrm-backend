@@ -6718,3 +6718,37 @@ INFO 2026-01-13 21:55:58,257 basehttp 81861 123145467531264 "GET /api/auth/ HTTP
 INFO 2026-01-13 21:55:58,278 basehttp 81861 123145467531264 "GET /api/auth/ HTTP/1.1" 200 1339
 INFO 2026-01-13 22:22:55,438 autoreload 81861 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
 INFO 2026-01-13 22:22:56,904 autoreload 48300 140704361279744 Watching for file changes with StatReloader
+WARNING 2026-01-13 23:07:09,011 log 48300 123145342156800 Method Not Allowed: /api/auth/validate/
+WARNING 2026-01-13 23:07:09,014 basehttp 48300 123145342156800 "GET /api/auth/validate/ HTTP/1.1" 405 40
+WARNING 2026-01-13 23:07:09,022 log 48300 123145342156800 Method Not Allowed: /api/auth/validate/
+WARNING 2026-01-13 23:07:09,023 basehttp 48300 123145342156800 "GET /api/auth/validate/ HTTP/1.1" 405 40
+INFO 2026-01-14 15:35:23,927 autoreload 48300 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-14 15:35:26,482 autoreload 69356 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-14 15:35:29,360 autoreload 69356 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/users/admin.py changed, reloading.
+INFO 2026-01-14 15:35:31,082 autoreload 69364 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-14 17:59:36,087 basehttp 69364 123145532203008 "OPTIONS /api/auth/login/ HTTP/1.1" 200 0
+WARNING 2026-01-14 17:59:36,797 serializers 69364 123145532203008 Failed login attempt for non-existent user
+WARNING 2026-01-14 17:59:36,800 log 69364 123145532203008 Bad Request: /api/auth/login/
+WARNING 2026-01-14 17:59:36,801 basehttp 69364 123145532203008 "POST /api/auth/login/ HTTP/1.1" 400 45
+INFO 2026-01-14 17:59:41,816 basehttp 69364 123145532203008 "OPTIONS /api/audit/logs/batch HTTP/1.1" 200 0
+ERROR 2026-01-14 17:59:41,877 log 69364 123145532203008 Internal Server Error: /api/audit/logs/batch
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/audit/logs/batch/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2026-01-14 17:59:41,880 basehttp 69364 123145532203008 "POST /api/audit/logs/batch HTTP/1.1" 500 81831
+INFO 2026-01-14 20:25:18,626 autoreload 69364 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-14 20:25:19,784 autoreload 70406 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-14 20:25:23,336 autoreload 70406 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-14 20:25:24,031 autoreload 70412 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-14 20:25:36,811 autoreload 70412 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/core/urls.py changed, reloading.
+INFO 2026-01-14 20:25:37,520 autoreload 70561 140704361279744 Watching for file changes with StatReloader
