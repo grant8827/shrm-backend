@@ -6752,3 +6752,5 @@ INFO 2026-01-14 20:25:23,336 autoreload 70406 140704361279744 /Users/gregorygran
 INFO 2026-01-14 20:25:24,031 autoreload 70412 140704361279744 Watching for file changes with StatReloader
 INFO 2026-01-14 20:25:36,811 autoreload 70412 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/core/urls.py changed, reloading.
 INFO 2026-01-14 20:25:37,520 autoreload 70561 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-14 21:27:31,067 autoreload 70561 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/core/urls.py changed, reloading.
+INFO 2026-01-14 21:27:32,293 autoreload 17519 140704361279744 Watching for file changes with StatReloader
