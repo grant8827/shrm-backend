@@ -6754,3 +6754,33 @@ INFO 2026-01-14 20:25:36,811 autoreload 70412 140704361279744 /Users/gregorygran
 INFO 2026-01-14 20:25:37,520 autoreload 70561 140704361279744 Watching for file changes with StatReloader
 INFO 2026-01-14 21:27:31,067 autoreload 70561 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/core/urls.py changed, reloading.
 INFO 2026-01-14 21:27:32,293 autoreload 17519 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-14 21:32:37,014 autoreload 17519 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/core/urls.py changed, reloading.
+INFO 2026-01-14 21:32:38,054 autoreload 21444 140704361279744 Watching for file changes with StatReloader
+ERROR 2026-01-14 21:33:00,084 exception 21958 140704361279744 Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+WARNING 2026-01-14 21:33:00,275 log 21958 140704361279744 Bad Request: /api/health/
+ERROR 2026-01-14 21:33:00,276 exception 21958 140704361279744 Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/http/request.py", line 150, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+WARNING 2026-01-14 21:33:00,277 log 21958 140704361279744 Bad Request: /api/health/
+INFO 2026-01-14 21:33:14,170 autoreload 22841 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-14 21:33:39,823 basehttp 22841 123145454153728 "GET /api/health/ HTTP/1.1" 200 45
+INFO 2026-01-14 21:33:47,301 basehttp 22841 123145454153728 "GET /api/health/ HTTP/1.1" 200 45
+INFO 2026-01-14 21:34:10,161 basehttp 22841 123145454153728 "GET /api/health/ HTTP/1.1" 200 45
