@@ -1,4 +1,4 @@
-# Django Settings for TheraCare EHR System
+# Django Settings for SafeHaven EHR System
 import os
 import sys
 from pathlib import Path
@@ -216,15 +216,20 @@ CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS',
     cast=lambda v: [s.strip() for s in v.split(',')]
 )
 
-# Content Security Policy (CSP) - Development settings
+# Content Security Policy (CSP)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "fonts.googleapis.com")
+CSP_FONT_SRC = ("'self'", "fonts.gstatic.com")
+CSP_IMG_SRC = ("'self'", "data:")
+
 if DEBUG:
-    # Allow external fonts and local development connections
-    CSP_DEFAULT_SRC = ("'self'",)
-    CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "fonts.googleapis.com")
-    CSP_FONT_SRC = ("'self'", "fonts.gstatic.com")
+    # Development - allow local connections
     CSP_CONNECT_SRC = ("'self'", "localhost:3000", "localhost:5173", "localhost:5174", "localhost:8000", "127.0.0.1:3000", "127.0.0.1:5173", "127.0.0.1:5174", "127.0.0.1:8000", "ws:", "wss:")
-    CSP_IMG_SRC = ("'self'", "data:")
     CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'")  # Needed for Vite dev
+else:
+    # Production - allow Railway backend
+    CSP_CONNECT_SRC = ("'self'", "https://shrm-backend-production.up.railway.app", "https://shrm-frontend.up.railway.app", "wss://shrm-backend-production.up.railway.app", "ws:", "wss:")
+    CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")
 
 # Email Configuration
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
@@ -311,7 +316,7 @@ LOGGING = {
 
 # API Documentation
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'TheraCare API',
+    'TITLE': 'SafeHaven EHR API',
     'DESCRIPTION': 'HIPAA-Compliant Therapeutic EHR System API',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,

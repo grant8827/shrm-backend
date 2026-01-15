@@ -6784,3 +6784,404 @@ INFO 2026-01-14 21:33:14,170 autoreload 22841 140704361279744 Watching for file 
 INFO 2026-01-14 21:33:39,823 basehttp 22841 123145454153728 "GET /api/health/ HTTP/1.1" 200 45
 INFO 2026-01-14 21:33:47,301 basehttp 22841 123145454153728 "GET /api/health/ HTTP/1.1" 200 45
 INFO 2026-01-14 21:34:10,161 basehttp 22841 123145454153728 "GET /api/health/ HTTP/1.1" 200 45
+INFO 2026-01-14 21:40:53,217 autoreload 21444 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-14 21:40:54,130 autoreload 29206 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-14 22:14:06,129 signals 52363 140704361279744 New user created: grant88271@gmail.com with role admin
+INFO 2026-01-14 22:17:51,526 basehttp 29206 123145351950336 "OPTIONS /api/auth/login/ HTTP/1.1" 200 0
+INFO 2026-01-14 22:17:53,081 signals 29206 123145351950336 User updated: grant88271@gmail.com
+INFO 2026-01-14 22:17:53,133 signals 29206 123145351950336 User updated: grant88271@gmail.com
+INFO 2026-01-14 22:17:53,134 serializers 29206 123145351950336 Successful user login
+INFO 2026-01-14 22:17:53,748 signals 29206 123145351950336 User updated: grant88271@gmail.com
+INFO 2026-01-14 22:17:53,750 basehttp 29206 123145351950336 "POST /api/auth/login/ HTTP/1.1" 200 1113
+INFO 2026-01-14 22:17:55,016 basehttp 29206 123145351950336 "OPTIONS /api/auth/ HTTP/1.1" 200 0
+INFO 2026-01-14 22:17:55,020 basehttp 29206 123145368739840 "OPTIONS /api/auth/ HTTP/1.1" 200 0
+INFO 2026-01-14 22:17:55,472 basehttp 29206 123145351950336 "GET /api/auth/ HTTP/1.1" 200 346
+INFO 2026-01-14 22:17:56,128 basehttp 29206 123145368739840 "GET /api/auth/ HTTP/1.1" 200 346
+INFO 2026-01-14 22:17:58,766 basehttp 29206 123145368739840 "OPTIONS /api/audit/logs/batch HTTP/1.1" 200 0
+INFO 2026-01-14 22:17:58,770 basehttp 29206 123145368739840 "POST /api/audit/logs/batch HTTP/1.1" 301 0
+INFO 2026-01-14 22:17:58,772 basehttp 29206 123145351950336 "OPTIONS /api/audit/logs/batch/ HTTP/1.1" 200 0
+WARNING 2026-01-14 22:17:59,553 log 29206 123145351950336 Method Not Allowed: /api/audit/logs/batch/
+WARNING 2026-01-14 22:17:59,554 basehttp 29206 123145351950336 "GET /api/audit/logs/batch/ HTTP/1.1" 405 40
+INFO 2026-01-14 22:18:18,545 basehttp 29206 123145385529344 "OPTIONS /api/users/ HTTP/1.1" 200 0
+INFO 2026-01-14 22:18:18,547 basehttp 29206 123145351950336 "OPTIONS /api/patients/ HTTP/1.1" 200 0
+WARNING 2026-01-14 22:18:18,548 log 29206 123145385529344 Not Found: /api/users/
+INFO 2026-01-14 22:18:18,548 basehttp 29206 123145402318848 "OPTIONS /api/patients/ HTTP/1.1" 200 0
+INFO 2026-01-14 22:18:18,552 basehttp 29206 123145419108352 "OPTIONS /api/users/ HTTP/1.1" 200 0
+WARNING 2026-01-14 22:18:18,553 basehttp 29206 123145385529344 "GET /api/users/ HTTP/1.1" 404 179
+WARNING 2026-01-14 22:18:18,555 log 29206 123145419108352 Not Found: /api/users/
+WARNING 2026-01-14 22:18:18,556 basehttp 29206 123145419108352 "GET /api/users/ HTTP/1.1" 404 179
+INFO 2026-01-14 22:18:19,311 basehttp 29206 123145351950336 "GET /api/patients/ HTTP/1.1" 200 100
+INFO 2026-01-14 22:18:19,954 basehttp 29206 123145419108352 "GET /api/patients/ HTTP/1.1" 200 100
+INFO 2026-01-14 22:18:25,509 basehttp 29206 123145419108352 "GET /api/auth/ HTTP/1.1" 200 346
+INFO 2026-01-14 22:18:25,971 basehttp 29206 123145351950336 "GET /api/auth/ HTTP/1.1" 200 346
+INFO 2026-01-14 22:49:49,330 basehttp 29206 123145351950336 "GET /admin HTTP/1.1" 301 0
+INFO 2026-01-14 22:49:49,388 basehttp 29206 123145368739840 "GET /admin/ HTTP/1.1" 302 0
+ERROR 2026-01-14 22:49:49,445 log 29206 123145351950336 Internal Server Error: /admin/login/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 116, in render
+    url = self.url(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 113, in url
+    return self.handle_simple(path)
+           ~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 129, in handle_simple
+    return staticfiles_storage.url(path)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 203, in url
+    return self._url(self.stored_name, name, force)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 182, in _url
+    hashed_name = hashed_name_func(*args)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 513, in stored_name
+    raise ValueError(
+        "Missing staticfiles manifest entry for '%s'" % clean_name
+    )
+ValueError: Missing staticfiles manifest entry for 'admin/css/base.css'
+ERROR 2026-01-14 22:49:49,452 basehttp 29206 123145351950336 "GET /admin/login/?next=/admin/ HTTP/1.1" 500 145
+ERROR 2026-01-14 22:51:32,684 log 29206 123145351950336 Internal Server Error: /admin/login/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 116, in render
+    url = self.url(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 113, in url
+    return self.handle_simple(path)
+           ~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 129, in handle_simple
+    return staticfiles_storage.url(path)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 203, in url
+    return self._url(self.stored_name, name, force)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 182, in _url
+    hashed_name = hashed_name_func(*args)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 513, in stored_name
+    raise ValueError(
+        "Missing staticfiles manifest entry for '%s'" % clean_name
+    )
+ValueError: Missing staticfiles manifest entry for 'admin/css/base.css'
+ERROR 2026-01-14 22:51:32,689 basehttp 29206 123145351950336 "GET /admin/login/?next=/admin/ HTTP/1.1" 500 145
+ERROR 2026-01-14 22:51:34,589 log 29206 123145368739840 Internal Server Error: /admin/login/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 116, in render
+    url = self.url(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 113, in url
+    return self.handle_simple(path)
+           ~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 129, in handle_simple
+    return staticfiles_storage.url(path)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 203, in url
+    return self._url(self.stored_name, name, force)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 182, in _url
+    hashed_name = hashed_name_func(*args)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 513, in stored_name
+    raise ValueError(
+        "Missing staticfiles manifest entry for '%s'" % clean_name
+    )
+ValueError: Missing staticfiles manifest entry for 'admin/css/base.css'
+ERROR 2026-01-14 22:51:34,596 basehttp 29206 123145368739840 "GET /admin/login/?next=/admin/ HTTP/1.1" 500 145
+INFO 2026-01-14 22:51:35,775 basehttp 29206 123145385529344 "GET /admin/patients HTTP/1.1" 302 0
+ERROR 2026-01-14 22:51:35,784 log 29206 123145385529344 Internal Server Error: /admin/login/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 116, in render
+    url = self.url(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 113, in url
+    return self.handle_simple(path)
+           ~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 129, in handle_simple
+    return staticfiles_storage.url(path)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 203, in url
+    return self._url(self.stored_name, name, force)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 182, in _url
+    hashed_name = hashed_name_func(*args)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 513, in stored_name
+    raise ValueError(
+        "Missing staticfiles manifest entry for '%s'" % clean_name
+    )
+ValueError: Missing staticfiles manifest entry for 'admin/css/base.css'
+ERROR 2026-01-14 22:51:35,790 basehttp 29206 123145385529344 "GET /admin/login/?next=/admin/patients HTTP/1.1" 500 145
+INFO 2026-01-14 22:51:38,340 basehttp 29206 123145402318848 "OPTIONS /api/auth/validate HTTP/1.1" 200 0
+INFO 2026-01-14 22:51:38,341 basehttp 29206 123145419108352 "OPTIONS /api/auth/validate HTTP/1.1" 200 0
+INFO 2026-01-14 22:51:38,459 basehttp 29206 123145419108352 "OPTIONS /api/auth/validate/ HTTP/1.1" 200 0
+INFO 2026-01-14 22:51:38,460 basehttp 29206 123145402318848 "OPTIONS /api/auth/validate/ HTTP/1.1" 200 0
+WARNING 2026-01-14 22:51:38,474 log 29206 123145419108352 Method Not Allowed: /api/auth/validate/
+WARNING 2026-01-14 22:51:38,474 basehttp 29206 123145419108352 "GET /api/auth/validate/ HTTP/1.1" 405 40
+WARNING 2026-01-14 22:51:38,476 log 29206 123145402318848 Method Not Allowed: /api/auth/validate/
+WARNING 2026-01-14 22:51:38,476 basehttp 29206 123145402318848 "GET /api/auth/validate/ HTTP/1.1" 405 40
+INFO 2026-01-14 22:51:43,350 signals 29206 123145402318848 User updated: grant88271@gmail.com
+INFO 2026-01-14 22:51:43,401 signals 29206 123145402318848 User updated: grant88271@gmail.com
+INFO 2026-01-14 22:51:43,401 serializers 29206 123145402318848 Successful user login
+INFO 2026-01-14 22:51:44,034 signals 29206 123145402318848 User updated: grant88271@gmail.com
+INFO 2026-01-14 22:51:44,036 basehttp 29206 123145402318848 "POST /api/auth/login/ HTTP/1.1" 200 1113
+INFO 2026-01-14 22:51:45,747 basehttp 29206 123145402318848 "GET /api/auth/ HTTP/1.1" 200 346
+INFO 2026-01-14 22:51:46,199 basehttp 29206 123145419108352 "GET /api/auth/ HTTP/1.1" 200 346
+INFO 2026-01-14 22:51:49,049 basehttp 29206 123145419108352 "POST /api/audit/logs/batch HTTP/1.1" 301 0
+WARNING 2026-01-14 22:51:49,550 log 29206 123145402318848 Method Not Allowed: /api/audit/logs/batch/
+WARNING 2026-01-14 22:51:49,551 basehttp 29206 123145402318848 "GET /api/audit/logs/batch/ HTTP/1.1" 405 40
+WARNING 2026-01-14 22:51:58,555 log 29206 123145351950336 Not Found: /api/users/
+WARNING 2026-01-14 22:51:58,556 basehttp 29206 123145351950336 "GET /api/users/ HTTP/1.1" 404 179
+WARNING 2026-01-14 22:51:58,559 log 29206 123145351950336 Not Found: /api/users/
+WARNING 2026-01-14 22:51:58,559 basehttp 29206 123145351950336 "GET /api/users/ HTTP/1.1" 404 179
+INFO 2026-01-14 22:51:59,041 basehttp 29206 123145402318848 "GET /api/patients/ HTTP/1.1" 200 100
+INFO 2026-01-14 22:51:59,678 basehttp 29206 123145351950336 "GET /api/patients/ HTTP/1.1" 200 100
+INFO 2026-01-14 22:52:00,944 basehttp 29206 123145402318848 "OPTIONS /api/messages/threads/ HTTP/1.1" 200 0
+INFO 2026-01-14 22:52:00,945 basehttp 29206 123145368739840 "OPTIONS /api/messages/threads/ HTTP/1.1" 200 0
+INFO 2026-01-14 22:52:01,507 basehttp 29206 123145351950336 "GET /api/auth/ HTTP/1.1" 200 346
+INFO 2026-01-14 22:52:01,507 basehttp 29206 123145368739840 "GET /api/messages/threads/ HTTP/1.1" 200 100
+INFO 2026-01-14 22:52:02,284 basehttp 29206 123145351950336 "GET /api/messages/threads/ HTTP/1.1" 200 100
+INFO 2026-01-14 22:52:02,335 basehttp 29206 123145402318848 "GET /api/auth/ HTTP/1.1" 200 346
+WARNING 2026-01-14 22:52:15,092 log 29206 123145402318848 Method Not Allowed: /api/auth/validate/
+WARNING 2026-01-14 22:52:15,092 basehttp 29206 123145402318848 "GET /api/auth/validate/ HTTP/1.1" 405 40
+WARNING 2026-01-14 22:52:15,095 log 29206 123145351950336 Method Not Allowed: /api/auth/validate/
+WARNING 2026-01-14 22:52:15,095 basehttp 29206 123145351950336 "GET /api/auth/validate/ HTTP/1.1" 405 40
+INFO 2026-01-14 22:52:18,195 signals 29206 123145351950336 User updated: grant88271@gmail.com
+INFO 2026-01-14 22:52:18,229 signals 29206 123145351950336 User updated: grant88271@gmail.com
+INFO 2026-01-14 22:52:18,229 serializers 29206 123145351950336 Successful user login
+INFO 2026-01-14 22:52:18,776 signals 29206 123145351950336 User updated: grant88271@gmail.com
+INFO 2026-01-14 22:52:18,777 basehttp 29206 123145351950336 "POST /api/auth/login/ HTTP/1.1" 200 1113
+INFO 2026-01-14 22:52:20,443 basehttp 29206 123145351950336 "GET /api/auth/ HTTP/1.1" 200 346
+INFO 2026-01-14 22:52:20,888 basehttp 29206 123145402318848 "GET /api/auth/ HTTP/1.1" 200 346
+INFO 2026-01-14 22:52:23,786 basehttp 29206 123145402318848 "POST /api/audit/logs/batch HTTP/1.1" 301 0
+WARNING 2026-01-14 22:52:24,223 log 29206 123145351950336 Method Not Allowed: /api/audit/logs/batch/
+WARNING 2026-01-14 22:52:24,224 basehttp 29206 123145351950336 "GET /api/audit/logs/batch/ HTTP/1.1" 405 40
+INFO 2026-01-15 00:33:52,446 basehttp 29206 123145351413760 "OPTIONS /api/auth/logout HTTP/1.1" 200 0
+INFO 2026-01-15 00:33:52,469 basehttp 29206 123145351413760 "POST /api/auth/logout HTTP/1.1" 301 0
+INFO 2026-01-15 00:33:52,473 basehttp 29206 123145368203264 "OPTIONS /api/auth/logout/ HTTP/1.1" 200 0
+WARNING 2026-01-15 00:33:52,503 log 29206 123145368203264 Unauthorized: /api/auth/logout/
+WARNING 2026-01-15 00:33:52,503 basehttp 29206 123145368203264 "GET /api/auth/logout/ HTTP/1.1" 401 172
+INFO 2026-01-15 00:33:52,529 basehttp 29206 123145368203264 "OPTIONS /api/audit/logs/batch HTTP/1.1" 200 0
+INFO 2026-01-15 00:33:52,541 basehttp 29206 123145368203264 "POST /api/audit/logs/batch HTTP/1.1" 301 0
+INFO 2026-01-15 00:33:52,669 basehttp 29206 123145384992768 "OPTIONS /api/audit/logs/batch/ HTTP/1.1" 200 0
+WARNING 2026-01-15 00:33:52,695 log 29206 123145384992768 Unauthorized: /api/audit/logs/batch/
+WARNING 2026-01-15 00:33:52,696 basehttp 29206 123145384992768 "GET /api/audit/logs/batch/ HTTP/1.1" 401 172
+INFO 2026-01-15 14:53:33,954 autoreload 29206 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-15 14:53:38,000 autoreload 61557 140704361279744 Watching for file changes with StatReloader

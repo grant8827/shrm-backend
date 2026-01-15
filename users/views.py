@@ -145,7 +145,7 @@ class UserRegistrationView(generics.CreateAPIView):
     def send_welcome_email(self, user):
         """Send welcome email to new user."""
         try:
-            subject = f'Welcome to TheraCare - {user.get_role_display()}'
+            subject = f'Welcome to SafeHaven EHR - {user.get_role_display()}'
             message = render_to_string('emails/welcome_email.txt', {
                 'user': user,
                 'login_url': f"{settings.FRONTEND_URL}/login"
@@ -311,7 +311,7 @@ class PasswordResetRequestView(APIView):
             reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
             
             # Send email
-            subject = 'TheraCare - Password Reset Request'
+            subject = 'SafeHaven EHR - Password Reset Request'
             message = render_to_string('emails/password_reset_email.txt', {
                 'user': user,
                 'reset_url': reset_url,
