@@ -517,7 +517,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             'id', 'date_joined', 'last_login', 'failed_login_attempts', 
-            'locked_until', 'password_changed_at'
+            'locked_until', 'password_changed_at', 'first_name', 'last_name', 'full_name'
         ]
     
     def get_first_name(self, obj):
@@ -531,3 +531,16 @@ class UserDetailSerializer(serializers.ModelSerializer):
     def get_full_name(self, obj):
         """Get user's full name."""
         return obj.get_full_name()
+    
+    def update(self, instance, validated_data):
+        """Update user instance with validated data."""
+        # Update allowed fields
+        instance.email = validated_data.get('email', instance.email)
+        instance.role = validated_data.get('role', instance.role)
+        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.is_staff = validated_data.get('is_staff', instance.is_staff)
+        instance.requires_password_change = validated_data.get('requires_password_change', instance.requires_password_change)
+        
+        instance.save()
+        return instance
