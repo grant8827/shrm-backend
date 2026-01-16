@@ -44,9 +44,9 @@ class TelehealthSessionSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Cross-field validation."""
-        # Ensure patient and therapist are different
+        # Ensure patient and therapist are different (only if both exist)
         if 'patient' in data and 'therapist' in data:
-            if data['patient'] == data['therapist']:
+            if data['patient'] and data['therapist'] and data['patient'] == data['therapist']:
                 raise serializers.ValidationError(
                     "Patient and therapist must be different users."
                 )

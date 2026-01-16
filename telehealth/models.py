@@ -29,7 +29,9 @@ class TelehealthSession(models.Model):
     patient = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='patient_sessions'
+        related_name='patient_sessions',
+        null=True,
+        blank=True
     )
     therapist = models.ForeignKey(
         settings.AUTH_USER_MODEL,
