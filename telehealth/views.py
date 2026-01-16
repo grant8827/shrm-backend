@@ -213,7 +213,10 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def create_emergency(self, request):
         """
-        Create an emergency session and send link to patient via email.
+        Create an emergency session and send link via email.
+        Supports two modes:
+        1. Existing patient: Provide patient_id
+        2. New/External patient: Provide patient_email, patient_first_name, patient_last_name
         Therapist/Admin/Staff only.
         """
         if request.user.role not in ['admin', 'therapist', 'staff']:
@@ -223,19 +226,43 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
             )
         
         patient_id = request.data.get('patient_id')
-        if not patient_id:
-            return Response(
-                {'error': 'patient_id is required'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        patient_email = request.data.get('patient_email')
+        patient_first_name = request.data.get('patient_first_name')
+        patient_last_name = request.data.get('patient_last_name')
         
-        try:
-            from users.models import User
-            patient = User.objects.get(id=patient_id)
-        except User.DoesNotExist:
+        # Determine if using existing patient or external email
+        if patient_id:
+            # Mode 1: Existing patient
+            try:
+                from users.models import User
+                patient = User.objects.get(id=patient_id)
+                patient_name = f"{patient.first_name} {patient.last_name}"
+                recipient_email = patient.email
+            except User.DoesNotExist:
+                return Response(
+                    {'error': 'Patient not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        elif patient_email and patient_first_name and patient_last_name:
+            # Mode 2: External patient (no user account)
+            patient = None
+            patient_name = f"{patient_first_name} {patient_last_name}"
+            recipient_email = patient_email
+            
+            # Validate email format
+            from django.core.validators import validate_email
+            from django.core.exceptions import ValidationError
+            try:
+                validate_email(recipient_email)
+            except ValidationError:
+                return Response(
+                    {'error': 'Invalid email address'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
             return Response(
-                {'error': 'Patient not found'},
-                status=status.HTTP_404_NOT_FOUND
+                {'error': 'Either patient_id OR (patient_email, patient_first_name, patient_last_name) is required'},
+                status=status.HTTP_400_BAD_REQUEST
             )
         
         # Generate unique room_id
@@ -243,20 +270,21 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
         
         # Create emergency session
         session = TelehealthSession.objects.create(
-            title=f"Emergency Session - {patient.first_name} {patient.last_name}",
-            patient=patient,
+            title=f"Emergency Session - {patient_name}",
+            patient=patient,  # Will be None for external patients
             therapist=request.user,
             scheduled_at=timezone.now(),
             duration=30,  # Default 30 minutes
             status='in-progress',  # Start immediately
             room_id=room_id,
-            session_url=f"{settings.FRONTEND_URL}/telehealth/join/{room_id}"
+            session_url=f"{settings.FRONTEND_URL}/telehealth/join/{room_id}",
+            notes=f"External patient: {patient_name} ({recipient_email})" if not patient else ""
         )
         
-        # Send email to patient
+        # Send email
         try:
             email_context = {
-                'patient_name': f"{patient.first_name} {patient.last_name}",
+                'patient_name': patient_name,
                 'therapist_name': f"{request.user.first_name} {request.user.last_name}",
                 'session_url': session.session_url,
                 'room_id': room_id
@@ -269,7 +297,7 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
                 message=f"You have an emergency telehealth session. Join here: {session.session_url}",
                 html_message=email_body,
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[patient.email],
+                recipient_list=[recipient_email],
                 fail_silently=False,
             )
             
@@ -278,7 +306,8 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
                 extra={
                     'event_type': 'emergency_session_created',
                     'session_id': str(session.id),
-                    'patient_id': str(patient.id),
+                    'patient_id': str(patient.id) if patient else 'external',
+                    'patient_email': recipient_email,
                     'therapist_id': str(request.user.id),
                     'room_id': room_id,
                     'timestamp': timezone.now().isoformat(),
