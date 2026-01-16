@@ -43,6 +43,7 @@ LOCAL_APPS = [
     'appointments',
     'audit',
     'messages.apps.MessagesConfig',  # Use explicit config to avoid conflict with django.contrib.messages
+    'telehealth',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

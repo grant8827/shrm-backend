@@ -503,9 +503,10 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     """Serializer for detailed user view with all safe fields."""
     
-    first_name = serializers.SerializerMethodField()
-    last_name = serializers.SerializerMethodField()
+    # Read-only fields for display
     full_name = serializers.SerializerMethodField()
+    # Map phone_number to phone model field
+    phone_number = serializers.CharField(source='phone', required=False, allow_blank=True)
     
     class Meta:
         model = User
@@ -516,31 +517,40 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'locked_until', 'password_changed_at'
         ]
         read_only_fields = [
-            'id', 'date_joined', 'last_login', 'failed_login_attempts', 
-            'locked_until', 'password_changed_at', 'first_name', 'last_name', 'full_name'
+            'id', 'username', 'date_joined', 'last_login', 'failed_login_attempts', 
+            'locked_until', 'password_changed_at', 'full_name'
         ]
-    
-    def get_first_name(self, obj):
-        """Get decrypted first name."""
-        return obj.get_decrypted_first_name()
-    
-    def get_last_name(self, obj):
-        """Get decrypted last name."""
-        return obj.get_decrypted_last_name()
     
     def get_full_name(self, obj):
         """Get user's full name."""
         return obj.get_full_name()
     
+    def to_representation(self, instance):
+        """Custom representation to get decrypted values."""
+        data = super().to_representation(instance)
+        data['first_name'] = instance.get_decrypted_first_name()
+        data['last_name'] = instance.get_decrypted_last_name()
+        return data
+    
     def update(self, instance, validated_data):
         """Update user instance with validated data."""
         # Update allowed fields
-        instance.email = validated_data.get('email', instance.email)
-        instance.role = validated_data.get('role', instance.role)
-        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
-        instance.is_active = validated_data.get('is_active', instance.is_active)
-        instance.is_staff = validated_data.get('is_staff', instance.is_staff)
-        instance.requires_password_change = validated_data.get('requires_password_change', instance.requires_password_change)
+        if 'first_name' in validated_data:
+            instance.first_name = validated_data['first_name']
+        if 'last_name' in validated_data:
+            instance.last_name = validated_data['last_name']
+        if 'email' in validated_data:
+            instance.email = validated_data['email']
+        if 'role' in validated_data:
+            instance.role = validated_data['role']
+        if 'phone' in validated_data:  # Note: source='phone' maps phone_number to phone
+            instance.phone = validated_data['phone']
+        if 'is_active' in validated_data:
+            instance.is_active = validated_data['is_active']
+        if 'is_staff' in validated_data:
+            instance.is_staff = validated_data['is_staff']
+        if 'requires_password_change' in validated_data:
+            instance.requires_password_change = validated_data['requires_password_change']
         
         instance.save()
         return instance
