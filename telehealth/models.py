@@ -7,7 +7,6 @@ HIPAA-compliant telehealth session management.
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-import uuid
 
 
 class TelehealthSession(models.Model):
@@ -21,7 +20,8 @@ class TelehealthSession(models.Model):
         ('cancelled', 'Cancelled'),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # Use AutoField since the existing table has an integer id
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     
