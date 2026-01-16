@@ -34,6 +34,7 @@ THIRD_PARTY_APPS = [
     'django_extensions',
     'drf_spectacular',
     'django_filters',
+    'channels',
 ]
 
 LOCAL_APPS = [
@@ -252,14 +253,23 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
 # Channels Configuration (for WebSockets)
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [config('REDIS_URL', default='redis://localhost:6379/1')],
+if DEBUG:
+    # Development - use in-memory channel layer
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer',
         },
-    },
-}
+    }
+else:
+    # Production - use Redis
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                'hosts': [config('REDIS_URL', default='redis://localhost:6379/1')],
+            },
+        },
+    }
 
 # Logging Configuration
 LOGGING = {
