@@ -36,15 +36,17 @@ class VideoSessionConsumer(AsyncWebsocketConsumer):
                 await self.close()
                 return
             
+            # Accept connection first
+            await self.accept()
+            
             # Join room group
             await self.channel_layer.group_add(
                 self.room_group_name,
                 self.channel_name
             )
             
-            await self.accept()
-            
-            # Notify others that a new participant joined
+            # Notify ONLY OTHER participants that a new participant joined
+            # Don't send to the new participant themselves
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
