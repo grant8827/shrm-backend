@@ -9333,3 +9333,7 @@ INFO 2026-01-16 17:30:28,850 autoreload 65473 140704361279744 /Users/gregorygran
 INFO 2026-01-16 17:30:30,047 autoreload 1492 140704361279744 Watching for file changes with StatReloader
 INFO 2026-01-16 17:30:46,350 autoreload 1492 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/serializers.py changed, reloading.
 INFO 2026-01-16 17:30:47,332 autoreload 1883 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-16 17:54:34,831 autoreload 1883 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/views.py changed, reloading.
+INFO 2026-01-16 17:54:36,058 autoreload 33930 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-16 17:54:55,419 autoreload 33930 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/views.py changed, reloading.
+INFO 2026-01-16 17:54:56,460 autoreload 34417 140704361279744 Watching for file changes with StatReloader
