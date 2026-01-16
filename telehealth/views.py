@@ -9,9 +9,13 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
 from django.db.models import Q
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
 from .models import TelehealthSession
 from .serializers import TelehealthSessionSerializer, TelehealthSessionCreateSerializer
 import logging
+import uuid
 
 logger = logging.getLogger('theracare.audit')
 
@@ -39,9 +43,19 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
         return TelehealthSessionSerializer
 
     def get_queryset(self):
-        """Filter sessions based on user role."""
+        """Filter sessions based on user role and query parameters."""
         user = self.request.user
         queryset = TelehealthSession.objects.all()
+
+        # Filter by room_id if provided (for join links)
+        room_id = self.request.query_params.get('room_id', None)
+        if room_id:
+            queryset = queryset.filter(room_id=room_id)
+            # For room_id queries, allow patient to see their session
+            # even if they wouldn't normally see it
+            if user.role == 'client':
+                queryset = queryset.filter(patient=user)
+            return queryset
 
         # Admin sees all sessions
         if user.role == 'admin':
@@ -195,3 +209,85 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
         
         serializer = self.get_serializer(session)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['post'])
+    def create_emergency(self, request):
+        """
+        Create an emergency session and send link to patient via email.
+        Therapist/Admin/Staff only.
+        """
+        if request.user.role not in ['admin', 'therapist', 'staff']:
+            return Response(
+                {'error': 'Only therapists, staff, and admins can create emergency sessions.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        patient_id = request.data.get('patient_id')
+        if not patient_id:
+            return Response(
+                {'error': 'patient_id is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            from users.models import User
+            patient = User.objects.get(id=patient_id)
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'Patient not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Generate unique room_id
+        room_id = str(uuid.uuid4())
+        
+        # Create emergency session
+        session = TelehealthSession.objects.create(
+            title=f"Emergency Session - {patient.first_name} {patient.last_name}",
+            patient=patient,
+            therapist=request.user,
+            scheduled_at=timezone.now(),
+            duration=30,  # Default 30 minutes
+            status='in-progress',  # Start immediately
+            room_id=room_id,
+            session_url=f"{settings.FRONTEND_URL}/telehealth/join/{room_id}"
+        )
+        
+        # Send email to patient
+        try:
+            email_context = {
+                'patient_name': f"{patient.first_name} {patient.last_name}",
+                'therapist_name': f"{request.user.first_name} {request.user.last_name}",
+                'session_url': session.session_url,
+                'room_id': room_id
+            }
+            
+            email_body = render_to_string('emails/emergency_session.html', email_context)
+            
+            send_mail(
+                subject='Emergency Telehealth Session - Join Now',
+                message=f"You have an emergency telehealth session. Join here: {session.session_url}",
+                html_message=email_body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[patient.email],
+                fail_silently=False,
+            )
+            
+            logger.info(
+                'Emergency session created and email sent',
+                extra={
+                    'event_type': 'emergency_session_created',
+                    'session_id': str(session.id),
+                    'patient_id': str(patient.id),
+                    'therapist_id': str(request.user.id),
+                    'room_id': room_id,
+                    'timestamp': timezone.now().isoformat(),
+                }
+            )
+        except Exception as e:
+            logger.error(f"Failed to send emergency session email: {str(e)}")
+            # Don't fail the request if email fails
+        
+        serializer = self.get_serializer(session)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+

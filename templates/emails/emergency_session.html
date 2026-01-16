@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Telehealth Session</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 30px;
+            border: 1px solid #ddd;
+        }
+        .header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+            margin: -30px -30px 20px -30px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #1976d2;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #1565c0;
+        }
+        .info-box {
+            background-color: #fff;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            color: #777;
+            font-size: 12px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 Emergency Telehealth Session</h1>
+        </div>
+        
+        <div class="content">
+            <p><strong>Hello {{ patient_name }},</strong></p>
+            
+            <p>{{ therapist_name }} has started an emergency telehealth session with you.</p>
+            
+            <div class="info-box">
+                <p><strong>Session Details:</strong></p>
+                <ul>
+                    <li><strong>Therapist:</strong> {{ therapist_name }}</li>
+                    <li><strong>Type:</strong> Emergency Session</li>
+                    <li><strong>Duration:</strong> 30 minutes</li>
+                </ul>
+            </div>
+            
+            <p><strong>Click the button below to join the session immediately:</strong></p>
+            
+            <div style="text-align: center;">
+                <a href="{{ session_url }}" class="button">Join Session Now</a>
+            </div>
+            
+            <p style="color: #666; font-size: 14px; margin-top: 20px;">
+                If the button doesn't work, copy and paste this link into your browser:<br>
+                <a href="{{ session_url }}">{{ session_url }}</a>
+            </p>
+            
+            <p style="color: #d32f2f; font-weight: bold; margin-top: 30px;">
+                ⚠️ Please join as soon as possible. Your therapist is waiting for you.
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated message from TheraCare EHR System.</p>
+            <p>If you have questions, please contact your therapist directly.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -9321,3 +9321,9 @@ INFO 2026-01-15 18:54:25,124 autoreload 38296 140704361279744 Watching for file 
 INFO 2026-01-16 14:01:44,374 autoreload 42489 140704361279744 Watching for file changes with StatReloader
 INFO 2026-01-16 14:28:00,282 autoreload 42489 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/models.py changed, reloading.
 INFO 2026-01-16 14:28:04,862 autoreload 67263 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-16 15:15:43,663 autoreload 67263 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/views.py changed, reloading.
+INFO 2026-01-16 15:15:45,183 autoreload 16570 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-16 15:16:12,935 autoreload 16570 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/views.py changed, reloading.
+INFO 2026-01-16 15:16:13,724 autoreload 17096 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-16 15:20:36,745 autoreload 17096 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/views.py changed, reloading.
+INFO 2026-01-16 15:20:37,828 autoreload 22453 140704361279744 Watching for file changes with StatReloader
