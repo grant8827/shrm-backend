@@ -285,6 +285,11 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
         # Send email asynchronously in a separate thread to avoid timeout
         def send_email_async():
             try:
+                print(f"[EMAIL DEBUG] Preparing to send email to: {recipient_email}")
+                print(f"[EMAIL DEBUG] Session URL: {session.session_url}")
+                print(f"[EMAIL DEBUG] Email settings - Host: {settings.EMAIL_HOST}, Port: {settings.EMAIL_PORT}")
+                print(f"[EMAIL DEBUG] Email settings - USE_SSL: {settings.EMAIL_USE_SSL}, USE_TLS: {settings.EMAIL_USE_TLS}")
+                
                 email_context = {
                     'patient_name': patient_name,
                     'therapist_name': f"{request.user.first_name} {request.user.last_name}",
@@ -294,7 +299,7 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
                 
                 email_body = render_to_string('emails/emergency_session.html', email_context)
                 
-                send_mail(
+                result = send_mail(
                     subject='Emergency Telehealth Session - Join Now',
                     message=f"You have an emergency telehealth session. Join here: {session.session_url}",
                     html_message=email_body,
@@ -303,16 +308,23 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
                     fail_silently=False,
                 )
                 
+                print(f"[EMAIL DEBUG] Email sent successfully! Result: {result}")
+                
                 logger.info(
                     'Emergency session email sent successfully',
                     extra={
                         'event_type': 'emergency_session_email_sent',
                         'session_id': str(session.id),
                         'patient_email': recipient_email,
+                        'email_result': result,
                         'timestamp': timezone.now().isoformat(),
                     }
                 )
             except Exception as e:
+                print(f"[EMAIL DEBUG] FAILED to send email: {type(e).__name__}: {str(e)}")
+                import traceback
+                traceback.print_exc()
+                
                 logger.error(
                     f"Failed to send emergency session email: {str(e)}",
                     extra={
