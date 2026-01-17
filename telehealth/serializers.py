@@ -23,7 +23,7 @@ class TelehealthSessionSerializer(serializers.ModelSerializer):
             'id', 'title', 'description',
             'patient', 'patient_details',
             'therapist', 'therapist_details',
-            'scheduled_at', 'duration', 'status',
+            'scheduled_at', 'duration', 'status', 'is_emergency',
             'session_url', 'room_id',
             'notes', 'has_recording', 'has_transcript',
             'recording_url', 'transcript_url',
@@ -62,7 +62,7 @@ class TelehealthSessionCreateSerializer(serializers.ModelSerializer):
             'title', 'description',
             'patient', 'therapist',
             'scheduled_at', 'duration',
-            'notes'
+            'is_emergency', 'notes'
         ]
 
     def validate_scheduled_at(self, value):

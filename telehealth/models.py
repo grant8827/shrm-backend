@@ -45,6 +45,7 @@ class TelehealthSession(models.Model):
     
     # Session details
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
+    is_emergency = models.BooleanField(default=False, help_text="Whether this is an emergency session")
     session_url = models.URLField(blank=True, null=True, help_text="Video call URL")
     room_id = models.CharField(max_length=255, blank=True, null=True, help_text="Video room ID")
     
