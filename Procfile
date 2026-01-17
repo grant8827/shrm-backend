@@ -1,1 +1,1 @@
-web: gunicorn theracare.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120
+web: daphne -b 0.0.0.0 -p $PORT theracare.asgi:application
