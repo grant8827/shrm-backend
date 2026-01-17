@@ -45,13 +45,15 @@ class VideoSessionConsumer(AsyncWebsocketConsumer):
                 self.channel_name
             )
             
-            # Notify ONLY OTHER participants that a new participant joined
-            # Don't send to the new participant themselves
+            user_id = str(self.user.id) if self.user and self.user.is_authenticated else f'anon_{self.channel_name[-8:]}'
+            
+            # Notify ALL participants (including this one) that someone joined
+            # The frontend will handle who creates the offer
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'participant_joined',
-                    'user_id': str(self.user.id) if self.user and self.user.is_authenticated else 'anonymous',
+                    'user_id': user_id,
                     'sender_channel': self.channel_name
                 }
             )
@@ -64,12 +66,14 @@ class VideoSessionConsumer(AsyncWebsocketConsumer):
     
     async def disconnect(self, close_code):
         """Handle WebSocket disconnection."""
+        user_id = str(self.user.id) if self.user and self.user.is_authenticated else f'anon_{self.channel_name[-8:]}'
+        
         # Notify others that participant left
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'participant_left',
-                'user_id': str(self.user.id) if self.user and self.user.is_authenticated else 'anonymous',
+                'user_id': user_id,
                 'sender_channel': self.channel_name
             }
         )
@@ -138,13 +142,16 @@ class VideoSessionConsumer(AsyncWebsocketConsumer):
     
     async def handle_chat_message(self, data):
         """Handle chat message."""
+        sender_id = str(self.user.id) if self.user and self.user.is_authenticated else f'anon_{self.channel_name[-8:]}'
+        sender_name = f"{self.user.first_name} {self.user.last_name}" if self.user and self.user.is_authenticated else "Anonymous"
+        
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
                 'message': data['message'],
-                'sender_id': str(self.user.id) if self.user and self.user.is_authenticated else 'anonymous',
-                'sender_name': data.get('sender_name', 'Anonymous'),
+                'sender_id': sender_id,
+                'sender_name': sender_name,
                 'timestamp': data.get('timestamp'),
                 'sender_channel': self.channel_name
             }
