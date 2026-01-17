@@ -9347,3 +9347,33 @@ INFO 2026-01-16 19:02:19,105 autoreload 87598 140704361279744 /Users/gregorygran
 INFO 2026-01-16 19:02:20,302 autoreload 29033 140704361279744 Watching for file changes with StatReloader
 INFO 2026-01-16 19:02:29,223 autoreload 29033 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
 INFO 2026-01-16 19:02:30,182 autoreload 29190 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-16 21:31:03,446 signals 38873 140704361279744 New user created: therapist@test.com with role therapist
+INFO 2026-01-16 21:31:04,272 signals 38873 140704361279744 User updated: therapist@test.com
+INFO 2026-01-16 21:31:34,258 views 39858 140704361279744 Emergency session created
+INFO 2026-01-16 21:31:35,998 views 39858 123145576472576 Emergency session email sent successfully
+INFO 2026-01-16 21:32:56,670 views 41637 140704361279744 Emergency session created
+INFO 2026-01-16 21:32:58,235 views 41637 123145422012416 Emergency session email sent successfully
+INFO 2026-01-16 21:47:40,724 autoreload 29190 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/views.py changed, reloading.
+INFO 2026-01-16 21:47:42,334 autoreload 61655 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-16 21:48:02,943 views 62267 140704361279744 Emergency session created
+INFO 2026-01-16 21:48:04,755 views 62267 123145496895488 Emergency session email sent successfully
+INFO 2026-01-16 21:50:24,445 views 65690 140704361279744 Emergency session created
+INFO 2026-01-16 21:50:26,015 views 65690 123145575677952 Emergency session email sent successfully
+INFO 2026-01-17 19:21:54,183 autoreload 61655 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/models.py changed, reloading.
+INFO 2026-01-17 19:21:55,629 autoreload 78507 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-17 19:22:05,562 autoreload 78507 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/serializers.py changed, reloading.
+INFO 2026-01-17 19:22:06,309 autoreload 78732 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-17 19:22:09,866 autoreload 78732 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/serializers.py changed, reloading.
+INFO 2026-01-17 19:22:10,833 autoreload 78754 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-17 19:22:53,925 autoreload 78754 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/views.py changed, reloading.
+INFO 2026-01-17 19:22:54,881 autoreload 79661 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-17 19:23:06,785 autoreload 79661 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/views.py changed, reloading.
+INFO 2026-01-17 19:23:07,727 autoreload 79878 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-17 21:22:06,533 autoreload 79878 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/models.py changed, reloading.
+INFO 2026-01-17 21:22:08,685 autoreload 16337 140704361279744 Watching for file changes with StatReloader
+INFO 2026-01-17 21:23:04,365 autoreload 16337 140704361279744 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/telehealth/views.py changed, reloading.
+INFO 2026-01-17 21:23:11,711 autoreload 17052 140704361279744 Watching for file changes with StatReloader
+WARNING 2026-01-17 21:33:08,392 log 17052 123145435459584 Not Found: /ws/video/4ee29da3-02d4-42c3-8670-500978de02a4/
+WARNING 2026-01-17 21:33:08,412 basehttp 17052 123145435459584 "GET /ws/video/4ee29da3-02d4-42c3-8670-500978de02a4/ HTTP/1.1" 404 179
+INFO 2026-01-17 21:33:08,413 basehttp 17052 123145435459584 - Broken pipe from ('127.0.0.1', 60388)
+INFO 2026-01-17 21:36:46,424 autoreload 30991 140704361279744 Watching for file changes with StatReloader
