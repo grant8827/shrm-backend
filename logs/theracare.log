@@ -9400,3 +9400,11 @@ INFO 2026-01-20 23:15:03,553 autoreload 42304 140704643739904 /Users/gregorygran
 INFO 2026-01-20 23:15:04,151 autoreload 42306 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
 INFO 2026-01-20 23:15:05,351 autoreload 54500 140704643739904 Watching for file changes with StatReloader
 INFO 2026-01-20 23:15:06,473 autoreload 54504 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-20 23:16:18,124 autoreload 54500 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-20 23:16:18,344 autoreload 54504 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-20 23:16:21,513 autoreload 55446 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-20 23:16:22,817 autoreload 55448 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-20 23:21:14,625 autoreload 55448 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-20 23:21:14,739 autoreload 55446 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-20 23:21:18,486 autoreload 59430 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-20 23:21:19,382 autoreload 59433 140704643739904 Watching for file changes with StatReloader

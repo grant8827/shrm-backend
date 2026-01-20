@@ -17,9 +17,15 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
 
-# Add Railway's health check domain
+# Add Railway's health check domain and allow all Railway domains
 if 'healthcheck.railway.app' not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append('healthcheck.railway.app')
+
+# In production, allow all hosts if ALLOWED_HOSTS only has localhost
+# This is necessary for Railway deployments where the domain may change
+if not DEBUG or config('RAILWAY_ENVIRONMENT', default=None):
+    if all(host in ['localhost', '127.0.0.1', 'healthcheck.railway.app'] for host in ALLOWED_HOSTS):
+        ALLOWED_HOSTS = ['*']
 
 # Application definition
 DJANGO_APPS = [
