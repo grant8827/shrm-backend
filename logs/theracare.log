@@ -9383,3 +9383,16 @@ WARNING 2026-01-17 22:09:15,900 log 17052 123145452249088 Not Found: /ws/video/4
 WARNING 2026-01-17 22:09:15,901 basehttp 17052 123145452249088 "GET /ws/video/4ee29da3-02d4-42c3-8670-500978de02a4/ HTTP/1.1" 404 179
 WARNING 2026-01-17 22:58:54,598 log 17052 123145469038592 Not Found: /ws/video/4ee29da3-02d4-42c3-8670-500978de02a4/
 WARNING 2026-01-17 22:58:54,606 basehttp 17052 123145469038592 "GET /ws/video/4ee29da3-02d4-42c3-8670-500978de02a4/ HTTP/1.1" 404 179
+INFO 2026-01-20 21:23:02,386 autoreload 63395 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-20 22:39:28,383 autoreload 24946 140704643739904 Watching for file changes with StatReloader
+WARNING 2026-01-20 22:40:06,206 log 24946 123145604460544 Not Found: /ws/video/4ee29da3-02d4-42c3-8670-500978de02a4/
+WARNING 2026-01-20 22:40:06,207 basehttp 24946 123145604460544 "GET /ws/video/4ee29da3-02d4-42c3-8670-500978de02a4/ HTTP/1.1" 404 179
+INFO 2026-01-20 22:40:06,208 basehttp 24946 123145604460544 - Broken pipe from ('127.0.0.1', 55225)
+INFO 2026-01-20 22:46:06,649 autoreload 63395 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-20 22:46:06,996 autoreload 24946 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-20 22:46:10,664 autoreload 30097 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-20 22:46:11,641 autoreload 30098 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-20 23:02:49,547 autoreload 30097 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-20 23:02:49,641 autoreload 30098 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-20 23:02:57,614 autoreload 42304 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-20 23:02:59,134 autoreload 42306 140704643739904 Watching for file changes with StatReloader

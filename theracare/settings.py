@@ -180,7 +180,7 @@ SIMPLE_JWT = {
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', 
-    default='http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,http://localhost:5174,http://127.0.0.1:5174',
+    default='http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174',
     cast=lambda v: [s.strip() for s in v.split(',')]
 )
 
@@ -253,21 +253,24 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
 # Channels Configuration (for WebSockets)
-if DEBUG:
-    # Development - use in-memory channel layer
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        },
-    }
-else:
-    # Production - use Redis
+# Check if Redis URL is provided, otherwise use in-memory layer
+REDIS_URL = config('REDIS_URL', default=None)
+
+if REDIS_URL:
+    # Use Redis when REDIS_URL is provided
     CHANNEL_LAYERS = {
         'default': {
             'BACKEND': 'channels_redis.core.RedisChannelLayer',
             'CONFIG': {
-                'hosts': [config('REDIS_URL', default='redis://localhost:6379/1')],
+                'hosts': [REDIS_URL],
             },
+        },
+    }
+else:
+    # Use in-memory channel layer (works for single-server deployments)
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer',
         },
     }
 
