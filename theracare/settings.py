@@ -94,12 +94,29 @@ TEMPLATES = [
 WSGI_APPLICATION = 'theracare.wsgi.application'
 ASGI_APPLICATION = 'theracare.asgi.application'
 
-# Database
-DATABASES = {
-    'default': dj_database_url.parse(
-        config('DATABASE_URL', default='postgresql://postgres:cIEHVGVBrmKtceHzOhyiNeBNCOJxdWma@gondola.proxy.rlwy.net:16249/railway')
-    )
-}
+# Database Configuration
+# Use DATABASE_URL if provided (for Railway/PostgreSQL), otherwise use individual DB variables
+DB_CONNECTION = config('DB_CONNECTION', default='postgresql')
+
+if config('DATABASE_URL', default=None):
+    # Use DATABASE_URL for Railway PostgreSQL
+    DATABASES = {
+        'default': dj_database_url.parse(
+            config('DATABASE_URL', default='postgresql://postgres:cIEHVGVBrmKtceHzOhyiNeBNCOJxdWma@gondola.proxy.rlwy.net:16249/railway')
+        )
+    }
+else:
+    # Use individual database variables for MySQL or other databases
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql' if DB_CONNECTION == 'mysql' else 'django.db.backends.postgresql',
+            'NAME': config('DB_DATABASE', default='railway'),
+            'USER': config('DB_USERNAME', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD', default=''),
+            'HOST': config('DB_HOST', default='127.0.0.1'),
+            'PORT': config('DB_PORT', default='3306' if DB_CONNECTION == 'mysql' else '5432'),
+        }
+    }
 
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'
