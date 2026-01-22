@@ -71,9 +71,10 @@ class Appointment(models.Model):
     
     # Core appointment details
     patient = models.ForeignKey(
-        'patients.Patient', 
+        'users.User', 
         on_delete=models.CASCADE, 
-        related_name='appointments'
+        related_name='patient_appointments',
+        limit_choices_to={'role': 'client'}
     )
     therapist = models.ForeignKey(
         'users.User', 
