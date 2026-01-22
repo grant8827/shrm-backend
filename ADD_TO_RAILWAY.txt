@@ -1,0 +1,16 @@
+# Add this variable to Railway Backend Environment Variables
+
+DATABASE_URL=postgresql://postgres:cIEHVGVBrmKtceHzOhyiNeBNCOJxdWma@gondola.proxy.rlwy.net:16249/railway
+
+# Steps:
+# 1. Go to Railway Dashboard: https://railway.app/dashboard
+# 2. Click on your backend service
+# 3. Go to "Variables" tab
+# 4. Click "New Variable"
+# 5. Add:
+#    Name: DATABASE_URL
+#    Value: postgresql://postgres:cIEHVGVBrmKtceHzOhyiNeBNCOJxdWma@gondola.proxy.rlwy.net:16249/railway
+# 6. Click "Add"
+# 7. Railway will automatically redeploy
+# 8. Wait for deployment to complete
+# 9. Try logging in again with grant8827 / AdminPass123!
