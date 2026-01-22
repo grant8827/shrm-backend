@@ -24,8 +24,8 @@ class BillingPermission(permissions.BasePermission):
         if request.user.role in ['admin', 'staff']:
             return True
         
-        # Patients can only view (GET)
-        if request.user.role == 'patient' and request.method in permissions.SAFE_METHODS:
+        # Clients and Therapists can only view (GET)
+        if request.user.role in ['client', 'therapist'] and request.method in permissions.SAFE_METHODS:
             return True
         
         return False
@@ -35,9 +35,9 @@ class BillingPermission(permissions.BasePermission):
         if request.user.role in ['admin', 'staff']:
             return True
         
-        # Patients can only view their own bills
-        if request.user.role == 'patient':
-            return obj.patient.user == request.user and request.method in permissions.SAFE_METHODS
+        # Clients can only view their own bills
+        if request.user.role == 'client':
+            return obj.patient == request.user and request.method in permissions.SAFE_METHODS
         
         return False
 
@@ -64,9 +64,9 @@ class BillViewSet(viewsets.ModelViewSet):
             
             return queryset
         
-        # Patients see only their own bills
-        elif user.role == 'patient':
-            return Bill.objects.filter(patient__user=user).select_related('patient', 'created_by').prefetch_related('payments')
+        # Clients see only their own bills
+        elif user.role == 'client':
+            return Bill.objects.filter(patient=user).select_related('patient', 'created_by').prefetch_related('payments')
         
         return Bill.objects.none()
     
@@ -89,7 +89,7 @@ class BillViewSet(viewsets.ModelViewSet):
             else:
                 bills = Bill.objects.all()
         else:
-            bills = Bill.objects.filter(patient__user=user)
+            bills = Bill.objects.filter(patient=user)
         
         total_billed = bills.aggregate(Sum('amount'))['amount__sum'] or 0
         total_paid = bills.aggregate(Sum('amount_paid'))['amount__sum'] or 0
