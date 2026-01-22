@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Bill, Payment
-from patients.models import Patient
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -17,7 +16,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     
     def get_recorded_by_name(self, obj):
         if obj.recorded_by:
-            return f"{obj.recorded_by.first_name} {obj.recorded_by.last_name}"
+            return obj.recorded_by.get_full_name()
         return None
 
 
@@ -46,11 +45,11 @@ class BillSerializer(serializers.ModelSerializer):
     
     def get_created_by_name(self, obj):
         if obj.created_by:
-            return f"{obj.created_by.first_name} {obj.created_by.last_name}"
+            return obj.created_by.get_full_name()
         return None
     
     def get_patient_name(self, obj):
-        return f"{obj.patient.first_name} {obj.patient.last_name}"
+        return obj.patient.get_full_name()
 
 
 class BillCreateSerializer(serializers.ModelSerializer):

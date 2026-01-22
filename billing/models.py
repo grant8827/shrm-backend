@@ -1,12 +1,11 @@
 from django.db import models
 from django.conf import settings
-from patients.models import Patient
 from decimal import Decimal
 
 
 class Bill(models.Model):
     """
-    Model to store billing information for patients.
+    Model to store billing information for patients (users with role='client').
     """
     STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -25,10 +24,10 @@ class Bill(models.Model):
     ]
     
     patient = models.ForeignKey(
-        Patient,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='bills',
-        help_text='Patient this bill belongs to'
+        help_text='Patient (user) this bill belongs to'
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
