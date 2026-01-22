@@ -10130,3 +10130,4 @@ Traceback (most recent call last):
     )
 ValueError: Missing staticfiles manifest entry for 'admin/css/base.css'
 ERROR 2026-01-21 15:15:55,816 basehttp 53541 123145538396160 "GET /admin/login/?next=/admin/ HTTP/1.1" 500 145
+INFO 2026-01-22 17:08:42,086 autoreload 53559 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.

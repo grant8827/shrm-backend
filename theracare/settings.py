@@ -53,6 +53,7 @@ LOCAL_APPS = [
     'patients',
     'appointments',
     'audit',
+    'billing',
     'messages.apps.MessagesConfig',  # Use explicit config to avoid conflict with django.contrib.messages
     'telehealth',
 ]
