@@ -52,6 +52,7 @@ class AppointmentPermission(permissions.BasePermission):
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
+    queryset = Appointment.objects.all()
     permission_classes = [AppointmentPermission]
     
     def get_queryset(self):
