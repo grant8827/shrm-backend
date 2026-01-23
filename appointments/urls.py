@@ -7,8 +7,8 @@ from .views import AppointmentViewSet, AppointmentTypeViewSet
 
 # Create a router and register our viewsets with it
 router = DefaultRouter()
-router.register(r'appointments', AppointmentViewSet, basename='appointment')
-router.register(r'appointment-types', AppointmentTypeViewSet, basename='appointment-type')
+router.register(r'', AppointmentViewSet, basename='appointment')  # Empty prefix since 'appointments/' is in main urls
+router.register(r'types', AppointmentTypeViewSet, basename='appointment-type')
 
 # URL patterns
 urlpatterns = [
