@@ -11244,3 +11244,36 @@ WARNING 2026-01-23 20:21:45,892 log 9383 123145567248384 Unauthorized: /api/soap
 WARNING 2026-01-23 20:21:45,893 log 9383 123145584037888 Unauthorized: /api/auth/
 WARNING 2026-01-23 20:21:45,895 basehttp 9383 123145567248384 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 401 172
 WARNING 2026-01-23 20:21:45,896 basehttp 9383 123145584037888 "GET /api/auth/?role=client HTTP/1.1" 401 172
+WARNING 2026-01-23 20:34:50,415 log 9383 123145600827392 Not Found: /apple-touch-icon.png
+WARNING 2026-01-23 20:34:50,417 log 9383 123145617616896 Not Found: /favicon.ico
+WARNING 2026-01-23 20:34:50,419 log 9383 123145567248384 Not Found: /
+WARNING 2026-01-23 20:34:50,420 basehttp 9383 123145600827392 "GET /apple-touch-icon.png HTTP/1.1" 404 179
+WARNING 2026-01-23 20:34:50,420 basehttp 9383 123145617616896 "GET /favicon.ico HTTP/1.1" 404 179
+WARNING 2026-01-23 20:34:50,421 log 9383 123145584037888 Not Found: /apple-touch-icon-precomposed.png
+WARNING 2026-01-23 20:34:50,425 basehttp 9383 123145567248384 "GET / HTTP/1.1" 404 179
+WARNING 2026-01-23 20:34:50,427 basehttp 9383 123145584037888 "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 179
+INFO 2026-01-23 20:41:05,232 basehttp 9383 123145567248384 "OPTIONS /api/audit/logs/batch/ HTTP/1.1" 200 0
+WARNING 2026-01-23 20:41:05,235 log 9383 123145567248384 Unauthorized: /api/audit/logs/batch/
+WARNING 2026-01-23 20:41:05,235 basehttp 9383 123145567248384 "POST /api/audit/logs/batch/ HTTP/1.1" 401 172
+INFO 2026-01-23 20:41:18,448 basehttp 9383 123145567248384 "OPTIONS /api/auth/login/ HTTP/1.1" 200 0
+INFO 2026-01-23 20:41:19,640 signals 9383 123145567248384 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 20:41:19,674 signals 9383 123145567248384 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 20:41:19,674 serializers 9383 123145567248384 Successful user login
+INFO 2026-01-23 20:41:20,418 signals 9383 123145567248384 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 20:41:20,420 basehttp 9383 123145567248384 "POST /api/auth/login/ HTTP/1.1" 200 1127
+INFO 2026-01-23 20:41:25,824 basehttp 9383 123145567248384 "POST /api/audit/logs/batch/ HTTP/1.1" 201 424
+INFO 2026-01-23 21:08:15,596 basehttp 9383 123145584037888 "GET /api/auth/?role=client HTTP/1.1" 200 1306
+INFO 2026-01-23 21:08:15,597 basehttp 9383 123145567248384 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 200 100
+INFO 2026-01-23 21:08:15,617 basehttp 9383 123145600827392 "OPTIONS /api/soap-notes/soap-notes/stats/ HTTP/1.1" 200 0
+INFO 2026-01-23 21:08:16,110 basehttp 9383 123145584037888 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 200 100
+INFO 2026-01-23 21:08:16,139 basehttp 9383 123145567248384 "GET /api/auth/?role=client HTTP/1.1" 200 1306
+INFO 2026-01-23 21:08:16,197 basehttp 9383 123145600827392 "GET /api/soap-notes/soap-notes/stats/ HTTP/1.1" 200 57
+INFO 2026-01-23 21:08:16,745 basehttp 9383 123145600827392 "GET /api/soap-notes/soap-notes/stats/ HTTP/1.1" 200 57
+INFO 2026-01-23 21:08:35,481 signals 9383 123145600827392 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 21:08:35,521 signals 9383 123145600827392 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 21:08:35,522 serializers 9383 123145600827392 Successful user login
+INFO 2026-01-23 21:08:36,410 signals 9383 123145600827392 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 21:08:36,412 basehttp 9383 123145600827392 "POST /api/auth/login/ HTTP/1.1" 200 1127
+INFO 2026-01-23 21:08:42,416 basehttp 9383 123145600827392 "POST /api/audit/logs/batch/ HTTP/1.1" 201 424
+INFO 2026-01-23 22:26:32,603 autoreload 9383 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/soap_notes/views.py changed, reloading.
+INFO 2026-01-23 22:26:34,357 autoreload 32664 140704643739904 Watching for file changes with StatReloader

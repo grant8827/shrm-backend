@@ -77,34 +77,35 @@ class SOAPNoteViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = SOAPNote.objects.select_related('patient', 'therapist', 'appointment')
         
-        # Filter by status if provided
+        # Role-based filtering first
+        if user.role == 'therapist':
+            queryset = queryset.filter(therapist=user)
+        elif user.role == 'client':
+            queryset = queryset.filter(patient=user)
+        elif user.role in ['admin', 'staff']:
+            # Admins and staff see all notes - no additional filtering
+            pass
+        else:
+            return queryset.none()
+        
+        # Apply additional filters after role-based filtering
         status_param = self.request.query_params.get('status', None)
         if status_param:
             queryset = queryset.filter(status=status_param)
         
-        # Filter by week if provided
         week_param = self.request.query_params.get('week', None)
         if week_param == 'current':
             today = timezone.now()
             start_of_week = today - timedelta(days=today.weekday())
             queryset = queryset.filter(session_date__gte=start_of_week)
         
-        # Filter by overdue if provided
         overdue_param = self.request.query_params.get('overdue', None)
         if overdue_param == 'true':
             # Notes in draft status older than 48 hours
             cutoff = timezone.now() - timedelta(hours=48)
             queryset = queryset.filter(status='draft', created_at__lt=cutoff)
         
-        # Role-based filtering
-        if user.role == 'therapist':
-            return queryset.filter(therapist=user)
-        elif user.role == 'client':
-            return queryset.filter(patient=user)
-        elif user.role in ['admin', 'staff']:
-            return queryset
-        
-        return queryset.none()
+        return queryset
     
     def perform_create(self, serializer):
         """Set therapist to current user if not provided"""
