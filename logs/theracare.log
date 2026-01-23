@@ -11069,3 +11069,178 @@ WARNING 2026-01-23 16:34:48,204 basehttp 89708 123145425219584 "GET /api/appoint
 INFO 2026-01-23 16:34:48,267 basehttp 89708 123145391640576 "GET /api/auth/ HTTP/1.1" 200 1306
 INFO 2026-01-23 16:34:48,309 basehttp 89708 123145442009088 "GET /api/appointments/ HTTP/1.1" 200 705
 INFO 2026-01-23 16:34:48,719 basehttp 89708 123145391640576 "GET /api/auth/ HTTP/1.1" 200 1306
+WARNING 2026-01-23 17:01:58,687 log 89708 123145391640576 Unauthorized: /api/auth/
+WARNING 2026-01-23 17:01:58,701 log 89708 123145408430080 Unauthorized: /api/appointments/types/
+WARNING 2026-01-23 17:01:58,716 log 89708 123145425219584 Unauthorized: /api/appointments/
+WARNING 2026-01-23 17:01:58,717 basehttp 89708 123145425219584 "GET /api/appointments/ HTTP/1.1" 401 172
+WARNING 2026-01-23 17:01:58,719 basehttp 89708 123145391640576 "GET /api/auth/ HTTP/1.1" 401 172
+WARNING 2026-01-23 17:01:58,725 log 89708 123145425219584 Unauthorized: /api/appointments/
+WARNING 2026-01-23 17:01:58,727 log 89708 123145442009088 Unauthorized: /api/auth/
+WARNING 2026-01-23 17:01:58,728 basehttp 89708 123145408430080 "GET /api/appointments/types/ HTTP/1.1" 401 172
+WARNING 2026-01-23 17:01:58,731 log 89708 123145391640576 Unauthorized: /api/appointments/types/
+WARNING 2026-01-23 17:01:58,732 basehttp 89708 123145425219584 "GET /api/appointments/ HTTP/1.1" 401 172
+WARNING 2026-01-23 17:01:58,733 basehttp 89708 123145391640576 "GET /api/appointments/types/ HTTP/1.1" 401 172
+WARNING 2026-01-23 17:01:58,734 basehttp 89708 123145442009088 "GET /api/auth/ HTTP/1.1" 401 172
+WARNING 2026-01-23 17:01:58,737 log 89708 123145442009088 Unauthorized: /api/auth/
+WARNING 2026-01-23 17:01:58,737 basehttp 89708 123145442009088 "GET /api/auth/ HTTP/1.1" 401 172
+WARNING 2026-01-23 17:01:58,741 log 89708 123145442009088 Unauthorized: /api/auth/
+WARNING 2026-01-23 17:01:58,741 basehttp 89708 123145442009088 "GET /api/auth/ HTTP/1.1" 401 172
+WARNING 2026-01-23 17:02:03,615 log 89708 123145442009088 Unauthorized: /api/audit/logs/batch/
+WARNING 2026-01-23 17:02:03,615 basehttp 89708 123145442009088 "POST /api/audit/logs/batch/ HTTP/1.1" 401 172
+INFO 2026-01-23 17:09:58,148 autoreload 89708 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/appointments/views.py changed, reloading.
+INFO 2026-01-23 17:10:04,365 autoreload 50778 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-23 17:10:19,291 autoreload 50778 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/appointments/views.py changed, reloading.
+INFO 2026-01-23 17:10:26,302 autoreload 51101 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-23 17:24:23,654 signals 51101 123145580523520 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:24:23,696 signals 51101 123145580523520 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:24:23,697 serializers 51101 123145580523520 Successful user login
+WARNING 2026-01-23 17:24:25,569 log 51101 123145597313024 Unauthorized: /api/audit/logs/batch/
+WARNING 2026-01-23 17:24:25,574 basehttp 51101 123145597313024 "POST /api/audit/logs/batch/ HTTP/1.1" 401 58
+INFO 2026-01-23 17:24:27,051 signals 51101 123145580523520 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:24:27,058 basehttp 51101 123145580523520 - Broken pipe from ('127.0.0.1', 54981)
+INFO 2026-01-23 17:24:36,046 signals 51101 123145597313024 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:24:36,086 signals 51101 123145597313024 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:24:36,087 serializers 51101 123145597313024 Successful user login
+WARNING 2026-01-23 17:24:37,997 log 51101 123145580523520 Unauthorized: /api/audit/logs/batch/
+WARNING 2026-01-23 17:24:37,998 basehttp 51101 123145580523520 "POST /api/audit/logs/batch/ HTTP/1.1" 401 58
+INFO 2026-01-23 17:24:40,363 signals 51101 123145597313024 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:24:40,377 basehttp 51101 123145597313024 - Broken pipe from ('127.0.0.1', 55169)
+INFO 2026-01-23 17:25:39,561 signals 51101 123145580523520 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:25:39,622 signals 51101 123145580523520 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:25:39,623 serializers 51101 123145580523520 Successful user login
+WARNING 2026-01-23 17:25:41,293 log 51101 123145597313024 Unauthorized: /api/audit/logs/batch/
+WARNING 2026-01-23 17:25:41,295 basehttp 51101 123145597313024 "POST /api/audit/logs/batch/ HTTP/1.1" 401 58
+INFO 2026-01-23 17:25:43,233 signals 51101 123145580523520 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:25:43,240 basehttp 51101 123145580523520 - Broken pipe from ('127.0.0.1', 57465)
+INFO 2026-01-23 17:27:23,074 signals 51101 123145597313024 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:27:23,118 signals 51101 123145597313024 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:27:23,118 serializers 51101 123145597313024 Successful user login
+INFO 2026-01-23 17:27:24,734 signals 51101 123145597313024 User updated: toni.thomas59@yahoo.com
+INFO 2026-01-23 17:27:24,737 basehttp 51101 123145597313024 "POST /api/auth/login/ HTTP/1.1" 200 1127
+INFO 2026-01-23 17:27:30,320 basehttp 51101 123145597313024 "POST /api/audit/logs/batch/ HTTP/1.1" 201 424
+INFO 2026-01-23 17:27:32,119 basehttp 51101 123145597313024 "OPTIONS /api/telehealth/sessions/my_sessions/ HTTP/1.1" 200 0
+INFO 2026-01-23 17:27:32,141 basehttp 51101 123145614102528 "OPTIONS /api/telehealth/sessions/my_sessions/ HTTP/1.1" 200 0
+INFO 2026-01-23 17:27:32,664 basehttp 51101 123145580523520 "GET /api/auth/ HTTP/1.1" 200 1306
+INFO 2026-01-23 17:27:32,726 basehttp 51101 123145597313024 "GET /api/telehealth/sessions/my_sessions/ HTTP/1.1" 200 1145
+INFO 2026-01-23 17:27:33,303 basehttp 51101 123145580523520 "GET /api/auth/ HTTP/1.1" 200 1306
+INFO 2026-01-23 17:27:33,379 basehttp 51101 123145597313024 "GET /api/telehealth/sessions/my_sessions/ HTTP/1.1" 200 1145
+WARNING 2026-01-23 17:27:41,648 log 51101 123145580523520 Not Found: /api/appointments/types/
+WARNING 2026-01-23 17:27:41,650 basehttp 51101 123145580523520 "GET /api/appointments/types/ HTTP/1.1" 404 23
+INFO 2026-01-23 17:27:41,724 basehttp 51101 123145597313024 "GET /api/auth/ HTTP/1.1" 200 1306
+INFO 2026-01-23 17:27:41,776 basehttp 51101 123145614102528 "GET /api/appointments/ HTTP/1.1" 200 702
+WARNING 2026-01-23 17:27:42,091 log 51101 123145580523520 Not Found: /api/appointments/types/
+WARNING 2026-01-23 17:27:42,098 basehttp 51101 123145580523520 "GET /api/appointments/types/ HTTP/1.1" 404 23
+INFO 2026-01-23 17:27:42,215 basehttp 51101 123145597313024 "GET /api/auth/ HTTP/1.1" 200 1306
+INFO 2026-01-23 17:27:42,323 basehttp 51101 123145614102528 "GET /api/appointments/ HTTP/1.1" 200 702
+INFO 2026-01-23 17:27:42,826 basehttp 51101 123145597313024 "GET /api/auth/ HTTP/1.1" 200 1306
+INFO 2026-01-23 17:27:43,348 basehttp 51101 123145597313024 "GET /api/auth/ HTTP/1.1" 200 1306
+INFO 2026-01-23 17:54:25,086 autoreload 51101 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/theracare/settings.py changed, reloading.
+INFO 2026-01-23 17:54:27,125 autoreload 87077 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-23 18:38:19,170 basehttp 87077 123145416577024 "GET /admin/ HTTP/1.1" 302 0
+ERROR 2026-01-23 18:38:19,457 log 87077 123145416577024 Internal Server Error: /admin/login/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 116, in render
+    url = self.url(context)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 113, in url
+    return self.handle_simple(path)
+           ~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/templatetags/static.py", line 129, in handle_simple
+    return staticfiles_storage.url(path)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 203, in url
+    return self._url(self.stored_name, name, force)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 182, in _url
+    hashed_name = hashed_name_func(*args)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/contrib/staticfiles/storage.py", line 513, in stored_name
+    raise ValueError(
+        "Missing staticfiles manifest entry for '%s'" % clean_name
+    )
+ValueError: Missing staticfiles manifest entry for 'admin/css/base.css'
+ERROR 2026-01-23 18:38:19,563 basehttp 87077 123145416577024 "GET /admin/login/?next=/admin/ HTTP/1.1" 500 145
+INFO 2026-01-23 20:19:22,731 autoreload 87077 140704643739904 /Users/gregorygrant/Desktop/Websites/react/react webapp/Safe Haven/safe-haven-software/backend/soap_notes/urls.py changed, reloading.
+INFO 2026-01-23 20:19:25,761 autoreload 9383 140704643739904 Watching for file changes with StatReloader
+INFO 2026-01-23 20:19:46,075 basehttp 9383 123145567248384 "OPTIONS /api/soap-notes/soap-notes/ HTTP/1.1" 200 0
+INFO 2026-01-23 20:19:46,080 basehttp 9383 123145584037888 "OPTIONS /api/soap-notes/soap-notes/ HTTP/1.1" 200 0
+WARNING 2026-01-23 20:19:46,174 log 9383 123145584037888 Unauthorized: /api/soap-notes/soap-notes/
+WARNING 2026-01-23 20:19:46,176 basehttp 9383 123145584037888 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 401 172
+WARNING 2026-01-23 20:19:46,188 log 9383 123145584037888 Unauthorized: /api/soap-notes/soap-notes/
+WARNING 2026-01-23 20:19:46,189 basehttp 9383 123145584037888 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 401 172
+WARNING 2026-01-23 20:20:03,464 log 9383 123145584037888 Unauthorized: /api/soap-notes/soap-notes/
+WARNING 2026-01-23 20:20:03,475 basehttp 9383 123145584037888 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 401 172
+INFO 2026-01-23 20:20:03,476 basehttp 9383 123145567248384 "OPTIONS /api/auth/?role=client HTTP/1.1" 200 0
+WARNING 2026-01-23 20:20:03,486 log 9383 123145584037888 Unauthorized: /api/auth/
+WARNING 2026-01-23 20:20:03,495 log 9383 123145567248384 Unauthorized: /api/soap-notes/soap-notes/
+WARNING 2026-01-23 20:20:03,503 basehttp 9383 123145567248384 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 401 172
+WARNING 2026-01-23 20:20:03,504 basehttp 9383 123145584037888 "GET /api/auth/?role=client HTTP/1.1" 401 172
+WARNING 2026-01-23 20:20:03,553 log 9383 123145567248384 Unauthorized: /api/auth/
+WARNING 2026-01-23 20:20:03,554 basehttp 9383 123145567248384 "GET /api/auth/?role=client HTTP/1.1" 401 172
+WARNING 2026-01-23 20:21:08,916 log 9383 123145567248384 Unauthorized: /api/soap-notes/soap-notes/
+WARNING 2026-01-23 20:21:08,921 basehttp 9383 123145567248384 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 401 172
+WARNING 2026-01-23 20:21:08,925 log 9383 123145584037888 Unauthorized: /api/auth/
+WARNING 2026-01-23 20:21:08,927 basehttp 9383 123145584037888 "GET /api/auth/?role=client HTTP/1.1" 401 172
+WARNING 2026-01-23 20:21:24,884 log 9383 123145584037888 Unauthorized: /api/soap-notes/soap-notes/
+WARNING 2026-01-23 20:21:24,885 log 9383 123145567248384 Unauthorized: /api/auth/
+WARNING 2026-01-23 20:21:24,888 basehttp 9383 123145567248384 "GET /api/auth/?role=client HTTP/1.1" 401 172
+WARNING 2026-01-23 20:21:24,886 basehttp 9383 123145584037888 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 401 172
+WARNING 2026-01-23 20:21:45,892 log 9383 123145567248384 Unauthorized: /api/soap-notes/soap-notes/
+WARNING 2026-01-23 20:21:45,893 log 9383 123145584037888 Unauthorized: /api/auth/
+WARNING 2026-01-23 20:21:45,895 basehttp 9383 123145567248384 "GET /api/soap-notes/soap-notes/ HTTP/1.1" 401 172
+WARNING 2026-01-23 20:21:45,896 basehttp 9383 123145584037888 "GET /api/auth/?role=client HTTP/1.1" 401 172
