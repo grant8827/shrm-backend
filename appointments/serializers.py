@@ -26,7 +26,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'therapist', 'therapist_name', 'appointment_type',
             'appointment_type_name', 'start_datetime', 'end_datetime',
             'timezone', 'status', 'priority', 'is_telehealth',
-            'is_recurring', 'created_at', 'updated_at'
+            'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'appointment_number', 'created_at', 'updated_at']
     
@@ -43,7 +43,7 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
         fields = [
             'patient', 'therapist', 'appointment_type',
             'start_datetime', 'end_datetime', 'timezone',
-            'status', 'priority', 'is_telehealth', 'is_recurring'
+            'status', 'priority', 'is_telehealth'
         ]
     
     def validate(self, data):
