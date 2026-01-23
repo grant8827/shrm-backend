@@ -117,14 +117,52 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return AppointmentSerializer
     
     def perform_create(self, serializer):
-        serializer.save()
+        appointment = serializer.save()
+        
+        # Auto-create telehealth session if appointment is telehealth
+        if appointment.is_telehealth:
+            from telehealth.models import TelehealthSession
+            TelehealthSession.objects.create(
+                title=f"Telehealth Session - {appointment.patient.get_full_name()}",
+                description=f"Scheduled telehealth appointment with {appointment.therapist.get_full_name()}",
+                patient=appointment.patient,
+                therapist=appointment.therapist,
+                scheduled_at=appointment.start_datetime,
+                duration=(appointment.end_datetime - appointment.start_datetime).seconds // 60,
+                status='scheduled'
+            )
+    
+    def perform_update(self, serializer):
+        appointment = serializer.save()
+        
+        # If appointment is cancelled, cancel linked telehealth session
+        if appointment.status == 'cancelled' and appointment.is_telehealth:
+            from telehealth.models import TelehealthSession
+            # Find and cancel the telehealth session
+            TelehealthSession.objects.filter(
+                patient=appointment.patient,
+                therapist=appointment.therapist,
+                scheduled_at=appointment.start_datetime,
+                status='scheduled'
+            ).update(status='cancelled')
     
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
-        """Cancel an appointment"""
+        """Cancel an appointment and linked telehealth session"""
         appointment = self.get_object()
         appointment.status = 'cancelled'
         appointment.save()
+        
+        # Cancel linked telehealth session if exists
+        if appointment.is_telehealth:
+            from telehealth.models import TelehealthSession
+            TelehealthSession.objects.filter(
+                patient=appointment.patient,
+                therapist=appointment.therapist,
+                scheduled_at=appointment.start_datetime,
+                status='scheduled'
+            ).update(status='cancelled')
+        
         serializer = self.get_serializer(appointment)
         return Response(serializer.data)
     
