@@ -15,7 +15,7 @@ class AppointmentPermission(permissions.BasePermission):
     Custom permission for appointments:
     - Admin and Staff can view all, create, update, delete
     - Therapists can view their own appointments and create/update them
-    - Clients can only view their own appointments
+    - Clients can view their own appointments and update status (confirm)
     """
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
@@ -29,9 +29,9 @@ class AppointmentPermission(permissions.BasePermission):
         if request.user.role == 'therapist':
             return True
         
-        # Clients can only view (GET)
-        if request.user.role == 'client' and request.method in permissions.SAFE_METHODS:
-            return True
+        # Clients can view (GET) and update status (PATCH)
+        if request.user.role == 'client':
+            return request.method in permissions.SAFE_METHODS or request.method == 'PATCH'
         
         return False
     
@@ -44,9 +44,11 @@ class AppointmentPermission(permissions.BasePermission):
         if request.user.role == 'therapist':
             return obj.therapist == request.user
         
-        # Clients can only view their own appointments
+        # Clients can view and update status of their own appointments
         if request.user.role == 'client':
-            return obj.patient == request.user and request.method in permissions.SAFE_METHODS
+            if obj.patient == request.user:
+                # Allow viewing and PATCH (for status updates)
+                return request.method in permissions.SAFE_METHODS or request.method == 'PATCH'
         
         return False
 
