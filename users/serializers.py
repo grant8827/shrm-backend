@@ -534,23 +534,22 @@ class UserDetailSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         """Update user instance with validated data."""
-        # Update allowed fields
+        # Only update fields that are actually in the validated_data
+        # Don't touch encrypted fields unless explicitly provided
+        for field in ['email', 'role', 'is_active', 'is_staff', 'requires_password_change']:
+            if field in validated_data:
+                setattr(instance, field, validated_data[field])
+        
+        # Handle mapped field (phone_number -> phone)
+        if 'phone' in validated_data:
+            instance.phone = validated_data['phone']
+        
+        # Only update encrypted fields if they're provided
+        # Skip them if not in validated_data to avoid save() issues
         if 'first_name' in validated_data:
             instance.first_name = validated_data['first_name']
         if 'last_name' in validated_data:
             instance.last_name = validated_data['last_name']
-        if 'email' in validated_data:
-            instance.email = validated_data['email']
-        if 'role' in validated_data:
-            instance.role = validated_data['role']
-        if 'phone' in validated_data:  # Note: source='phone' maps phone_number to phone
-            instance.phone = validated_data['phone']
-        if 'is_active' in validated_data:
-            instance.is_active = validated_data['is_active']
-        if 'is_staff' in validated_data:
-            instance.is_staff = validated_data['is_staff']
-        if 'requires_password_change' in validated_data:
-            instance.requires_password_change = validated_data['requires_password_change']
         
         instance.save()
         return instance
