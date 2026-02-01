@@ -531,50 +531,35 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
             raise
     
     def destroy(self, request, *args, **kwargs):
-        """Soft delete user account - override to prevent actual deletion."""
-        try:
-            instance = self.get_object()
-            
-            # Prevent deleting yourself
-            if instance.id == request.user.id:
-                return Response(
-                    {'error': 'You cannot delete your own account.'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            
-            # Soft delete - just deactivate the account
-            instance.is_active = False
-            instance.save(update_fields=['is_active'])
-            
-            logger.warning(
-                'User account deleted (soft delete)',
-                extra={
-                    'event_type': 'user_deleted',
-                    'user_id': str(instance.id),
-                    'username': instance.username,
-                    'deleted_by': str(request.user.id),
-                    'timestamp': timezone.now().isoformat(),
-                }
-            )
-            
+        """Delete user account permanently."""
+        instance = self.get_object()
+        
+        # Prevent deleting yourself
+        if instance.id == request.user.id:
             return Response(
-                {'message': 'User account deactivated successfully.'},
-                status=status.HTTP_204_NO_CONTENT
+                {'error': 'You cannot delete your own account.'},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        except Exception as e:
-            logger.error(
-                f'Error deleting user: {str(e)}',
-                extra={
-                    'event_type': 'user_delete_error',
-                    'error': str(e),
-                    'deleted_by': str(request.user.id),
-                    'timestamp': timezone.now().isoformat(),
-                }
-            )
-            return Response(
-                {'error': f'Failed to delete user: {str(e)}'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+        
+        # Log before deletion
+        logger.warning(
+            'User account deleted permanently',
+            extra={
+                'event_type': 'user_deleted',
+                'user_id': str(instance.id),
+                'username': instance.username,
+                'deleted_by': str(request.user.id),
+                'timestamp': timezone.now().isoformat(),
+            }
+        )
+        
+        # Actually delete the user
+        instance.delete()
+        
+        return Response(
+            {'message': 'User deleted successfully.'},
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 
 @api_view(['POST'])

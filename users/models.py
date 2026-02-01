@@ -110,32 +110,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ]
     
     def save(self, *args, **kwargs):
-        """Override save - encryption removed for troubleshooting"""
-        # Decrypt any existing encrypted data before saving
-        if self.first_name and (self.first_name.startswith('gAAAAAB') or self.first_name.startswith('Z0FBQUFBQnB')):
-            try:
-                self.first_name = encryption.decrypt(self.first_name)
-            except:
-                pass
-        
-        if self.last_name and (self.last_name.startswith('gAAAAAB') or self.last_name.startswith('Z0FBQUFBQnB')):
-            try:
-                self.last_name = encryption.decrypt(self.last_name)
-            except:
-                pass
-        
-        if self.phone and (self.phone.startswith('gAAAAAB') or self.phone.startswith('Z0FBQUFBQnB')):
-            try:
-                self.phone = encryption.decrypt(self.phone)
-            except:
-                pass
-        
-        if self.license_number and (self.license_number.startswith('gAAAAAB') or self.license_number.startswith('Z0FBQUFBQnB')):
-            try:
-                self.license_number = encryption.decrypt(self.license_number)
-            except:
-                pass
-        
+        """Override save method"""
         super().save(*args, **kwargs)
     
     def get_decrypted_first_name(self):
