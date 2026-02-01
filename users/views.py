@@ -460,7 +460,24 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     
     queryset = User.objects.all()
     serializer_class = UserDetailSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrSelf]
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def check_permissions(self, request):
+        """Override to ensure authenticated users can access."""
+        super().check_permissions(request)
+    
+    def check_object_permissions(self, request, obj):
+        """Check if user has permission to access this specific user object."""
+        # Admin can access any user
+        if request.user.role == 'admin':
+            return
+        
+        # Users can only access their own object
+        if obj.id != request.user.id:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("You can only access your own information unless you are an administrator.")
+        
+        super().check_object_permissions(request, obj)
     
     def perform_update(self, serializer):
         """Update user with audit logging."""
