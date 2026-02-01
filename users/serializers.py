@@ -150,13 +150,25 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['access'] = str(refresh.access_token)
         
         # Add user data to response
+        try:
+            first_name = user.get_decrypted_first_name()
+        except Exception as e:
+            logger.error(f'Error decrypting first_name during login for user {user.id}: {e}')
+            first_name = '[Decryption Error]'
+        
+        try:
+            last_name = user.get_decrypted_last_name()
+        except Exception as e:
+            logger.error(f'Error decrypting last_name during login for user {user.id}: {e}')
+            last_name = '[Decryption Error]'
+        
         data['user'] = {
             'id': str(user.id),
             'username': user.username,
             'email': user.email,
             'role': user.role,
-            'first_name': user.get_decrypted_first_name(),
-            'last_name': user.get_decrypted_last_name(),
+            'first_name': first_name,
+            'last_name': last_name,
             'is_active': user.is_active,
             'must_change_password': user.must_change_password,
             'last_login': user.last_login.isoformat() if user.last_login else None,
@@ -323,15 +335,27 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     def get_first_name(self, obj):
         """Get decrypted first name."""
-        return obj.get_decrypted_first_name()
+        try:
+            return obj.get_decrypted_first_name()
+        except Exception as e:
+            logger.error(f'Error decrypting first_name for user {obj.id}: {e}')
+            return '[Decryption Error]'
     
     def get_last_name(self, obj):
         """Get decrypted last name."""
-        return obj.get_decrypted_last_name()
+        try:
+            return obj.get_decrypted_last_name()
+        except Exception as e:
+            logger.error(f'Error decrypting last_name for user {obj.id}: {e}')
+            return '[Decryption Error]'
     
     def get_full_name(self, obj):
         """Get user's full name."""
-        return obj.get_full_name()
+        try:
+            return obj.get_full_name()
+        except Exception as e:
+            logger.error(f'Error getting full_name for user {obj.id}: {e}')
+            return '[Decryption Error]'
 
 
 class PasswordChangeSerializer(serializers.Serializer):
@@ -489,15 +513,27 @@ class UserSerializer(serializers.ModelSerializer):
     
     def get_first_name(self, obj):
         """Get decrypted first name."""
-        return obj.get_decrypted_first_name()
+        try:
+            return obj.get_decrypted_first_name()
+        except Exception as e:
+            logger.error(f'Error decrypting first_name for user {obj.id}: {e}')
+            return '[Decryption Error]'
     
     def get_last_name(self, obj):
         """Get decrypted last name."""
-        return obj.get_decrypted_last_name()
+        try:
+            return obj.get_decrypted_last_name()
+        except Exception as e:
+            logger.error(f'Error decrypting last_name for user {obj.id}: {e}')
+            return '[Decryption Error]'
     
     def get_full_name(self, obj):
         """Get user's full name."""
-        return obj.get_full_name()
+        try:
+            return obj.get_full_name()
+        except Exception as e:
+            logger.error(f'Error getting full_name for user {obj.id}: {e}')
+            return '[Decryption Error]'
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
@@ -528,8 +564,18 @@ class UserDetailSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         """Custom representation to get decrypted values."""
         data = super().to_representation(instance)
-        data['first_name'] = instance.get_decrypted_first_name()
-        data['last_name'] = instance.get_decrypted_last_name()
+        try:
+            data['first_name'] = instance.get_decrypted_first_name()
+        except Exception as e:
+            logger.error(f'Error decrypting first_name for user {instance.id}: {e}')
+            data['first_name'] = '[Decryption Error]'
+        
+        try:
+            data['last_name'] = instance.get_decrypted_last_name()
+        except Exception as e:
+            logger.error(f'Error decrypting last_name for user {instance.id}: {e}')
+            data['last_name'] = '[Decryption Error]'
+        
         return data
     
     def update(self, instance, validated_data):
