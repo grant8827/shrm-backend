@@ -21,7 +21,7 @@ from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from django.db.models import Q
-from .models import User
+from .models import User, RegistrationToken
 from .serializers import (
     CustomTokenObtainPairSerializer,
     UserRegistrationSerializer,
@@ -30,9 +30,12 @@ from .serializers import (
     PasswordResetRequestSerializer,
     PasswordResetConfirmSerializer,
     UserListSerializer,
-    UserDetailSerializer
+    UserDetailSerializer,
+    RegistrationTokenSerializer,
+    CompleteRegistrationSerializer
 )
 from .permissions import IsAdminOrSelf, IsAdminUser, IsTherapistOrAdmin
+from .email_service import send_registration_email
 import logging
 
 logger = logging.getLogger('theracare.audit')
@@ -578,3 +581,99 @@ def current_user(request):
     """Get current authenticated user information."""
     serializer = UserProfileSerializer(request.user)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def validate_registration_token(request):
+    """Validate a registration token and return patient data"""
+    token_value = request.data.get('token')
+    
+    if not token_value:
+        return Response(
+            {'error': 'Token is required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        token = RegistrationToken.objects.get(token=token_value)
+        
+        if not token.is_valid():
+            return Response(
+                {'error': 'This registration link has expired or has already been used.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        serializer = RegistrationTokenSerializer(token)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    except RegistrationToken.DoesNotExist:
+        return Response(
+            {'error': 'Invalid registration link.'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated, IsAdminUser])
+def send_patient_registration_email(request):
+    """Send registration email to a new patient"""
+    email = request.data.get('email')
+    first_name = request.data.get('first_name')
+    last_name = request.data.get('last_name')
+    phone_number = request.data.get('phone_number', '')
+    
+    if not all([email, first_name, last_name]):
+        return Response(
+            {'error': 'Email, first name, and last name are required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    success, token = send_registration_email(email, first_name, last_name, phone_number)
+    
+    if success:
+        return Response({
+            'message': 'Registration email sent successfully',
+            'token_id': str(token.id)
+        }, status=status.HTTP_200_OK)
+    else:
+        return Response(
+            {'error': 'Failed to send registration email'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def complete_registration(request):
+    """Complete patient registration by creating user account"""
+    serializer = CompleteRegistrationSerializer(data=request.data)
+    
+    if serializer.is_valid():
+        user = serializer.save()
+        
+        # Log successful registration
+        logger.info(
+            'Patient completed registration',
+            extra={
+                'event_type': 'registration_completed',
+                'user_id': str(user.id),
+                'username': user.username,
+                'email': user.email,
+                'timestamp': timezone.now().isoformat(),
+            }
+        )
+        
+        # Generate tokens for auto-login
+        refresh = RefreshToken.for_user(user)
+        
+        return Response({
+            'message': 'Registration completed successfully',
+            'user': UserProfileSerializer(user).data,
+            'tokens': {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }
+        }, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

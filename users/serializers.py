@@ -11,7 +11,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils import timezone
 from django.conf import settings
-from .models import User
+from .models import User, RegistrationToken
 import logging
 
 logger = logging.getLogger('theracare.audit')
@@ -554,3 +554,76 @@ class UserDetailSerializer(serializers.ModelSerializer):
         
         instance.save()
         return instance
+
+
+class RegistrationTokenSerializer(serializers.ModelSerializer):
+    """Serializer for registration token"""
+    
+    class Meta:
+        model = RegistrationToken
+        fields = ['token', 'email', 'first_name', 'last_name', 'phone_number', 'is_valid']
+    
+    is_valid = serializers.SerializerMethodField()
+    
+    def get_is_valid(self, obj):
+        return obj.is_valid()
+
+
+class CompleteRegistrationSerializer(serializers.Serializer):
+    """Serializer for completing patient registration"""
+    
+    token = serializers.CharField(required=True)
+    username = serializers.CharField(required=True, max_length=150)
+    password = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'})
+    password_confirm = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'})
+    
+    def validate_token(self, value):
+        """Validate token exists and is valid"""
+        try:
+            token = RegistrationToken.objects.get(token=value)
+            if not token.is_valid():
+                raise serializers.ValidationError('This registration link has expired or has already been used.')
+            return value
+        except RegistrationToken.DoesNotExist:
+            raise serializers.ValidationError('Invalid registration link.')
+    
+    def validate_username(self, value):
+        """Check if username is already taken"""
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError('This username is already taken.')
+        return value
+    
+    def validate(self, attrs):
+        """Validate passwords match"""
+        if attrs['password'] != attrs['password_confirm']:
+            raise serializers.ValidationError({'password_confirm': 'Passwords do not match.'})
+        
+        # Validate password strength
+        try:
+            validate_password(attrs['password'])
+        except DjangoValidationError as e:
+            raise serializers.ValidationError({'password': list(e.messages)})
+        
+        return attrs
+    
+    def create(self, validated_data):
+        """Create user from registration token"""
+        token_value = validated_data['token']
+        token = RegistrationToken.objects.get(token=token_value)
+        
+        # Create user account
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=token.email,
+            password=validated_data['password'],
+            first_name=token.first_name,
+            last_name=token.last_name,
+            phone=token.phone_number,
+            role=User.Role.CLIENT,
+            status=User.Status.ACTIVE
+        )
+        
+        # Mark token as used
+        token.mark_as_used(user)
+        
+        return user

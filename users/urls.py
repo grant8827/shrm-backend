@@ -36,4 +36,9 @@ urlpatterns = [
     path('<uuid:pk>/', views.UserDetailView.as_view(), name='user_detail'),
     path('<uuid:user_id>/unlock/', views.unlock_user_account, name='unlock_user_account'),
     path('<uuid:user_id>/force-password-change/', views.force_password_change, name='force_password_change'),
+    
+    # Patient registration completion
+    path('registration/send-email/', views.send_patient_registration_email, name='send_registration_email'),
+    path('registration/validate-token/', views.validate_registration_token, name='validate_registration_token'),
+    path('registration/complete/', views.complete_registration, name='complete_registration'),
 ]

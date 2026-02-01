@@ -277,3 +277,43 @@ class UserProfile(models.Model):
     
     def __str__(self):
         return f"Profile for {self.user.get_full_name()}"
+
+
+class RegistrationToken(models.Model):
+    """Token for patient registration completion"""
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    token = models.CharField(max_length=100, unique=True, db_index=True)
+    
+    # Patient data stored temporarily
+    email = models.EmailField()
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=20, blank=True)
+    
+    # Token status
+    is_used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+    
+    # Link to created user (when registration is complete)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='registration_token')
+    
+    class Meta:
+        db_table = 'registration_tokens'
+        ordering = ['-created_at']
+    
+    def is_valid(self):
+        """Check if token is still valid"""
+        return not self.is_used and timezone.now() < self.expires_at
+    
+    def mark_as_used(self, user):
+        """Mark token as used"""
+        self.is_used = True
+        self.used_at = timezone.now()
+        self.user = user
+        self.save()
+    
+    def __str__(self):
+        return f"Registration token for {self.email}"
