@@ -464,36 +464,53 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     
     def perform_update(self, serializer):
         """Update user with audit logging."""
-        old_user = User.objects.get(pk=self.get_object().pk)
-        user = serializer.save()
-        
-        # Log significant changes
-        if old_user.is_active != user.is_active:
-            logger.warning(
-                f'User account {"activated" if user.is_active else "deactivated"}',
+        try:
+            # Get the current state before updating
+            instance = self.get_object()
+            old_is_active = instance.is_active
+            old_role = instance.role
+            
+            # Save the updated user
+            user = serializer.save()
+            
+            # Log significant changes
+            if old_is_active != user.is_active:
+                logger.warning(
+                    f'User account {"activated" if user.is_active else "deactivated"}',
+                    extra={
+                        'event_type': 'user_status_changed',
+                        'user_id': str(user.id),
+                        'username': user.username,
+                        'is_active': user.is_active,
+                        'changed_by': str(self.request.user.id),
+                        'timestamp': timezone.now().isoformat(),
+                    }
+                )
+            
+            if old_role != user.role:
+                logger.warning(
+                    'User role changed',
+                    extra={
+                        'event_type': 'user_role_changed',
+                        'user_id': str(user.id),
+                        'username': user.username,
+                        'old_role': old_role,
+                        'new_role': user.role,
+                        'changed_by': str(self.request.user.id),
+                        'timestamp': timezone.now().isoformat(),
+                    }
+                )
+        except Exception as e:
+            logger.error(
+                f'Error updating user: {str(e)}',
                 extra={
-                    'event_type': 'user_status_changed',
-                    'user_id': str(user.id),
-                    'username': user.username,
-                    'is_active': user.is_active,
+                    'event_type': 'user_update_error',
+                    'error': str(e),
                     'changed_by': str(self.request.user.id),
                     'timestamp': timezone.now().isoformat(),
                 }
             )
-        
-        if old_user.role != user.role:
-            logger.warning(
-                'User role changed',
-                extra={
-                    'event_type': 'user_role_changed',
-                    'user_id': str(user.id),
-                    'username': user.username,
-                    'old_role': old_user.role,
-                    'new_role': user.role,
-                    'changed_by': str(self.request.user.id),
-                    'timestamp': timezone.now().isoformat(),
-                }
-            )
+            raise
     
     def perform_destroy(self, instance):
         """Soft delete user account."""
