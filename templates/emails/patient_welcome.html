@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Safe Haven EHR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border: 1px solid #ddd;
+        }
+        .credentials {
+            background-color: white;
+            border: 2px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .credentials-row {
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #f5f5f5;
+        }
+        .credentials-label {
+            font-weight: bold;
+            color: #2196F3;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .features {
+            background-color: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .features ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .features li:before {
+            content: "✓ ";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Welcome to Safe Haven EHR</h1>
+        <p>Your Patient Portal is Ready</p>
+    </div>
+    
+    <div class="content">
+        <p>Dear {{ first_name }},</p>
+        
+        <p>Welcome to Safe Haven EHR! Your healthcare provider has created a patient portal account for you to access your medical records, schedule appointments, and communicate with your care team.</p>
+        
+        <div class="credentials">
+            <h3 style="margin-top: 0; color: #2196F3;">Your Patient Portal Access Credentials</h3>
+            <div class="credentials-row">
+                <span class="credentials-label">Patient Number:</span> {{ patient_number }}
+            </div>
+            <div class="credentials-row">
+                <span class="credentials-label">Username:</span> {{ username }}
+            </div>
+            <div class="credentials-row">
+                <span class="credentials-label">Temporary Password:</span> {{ temporary_password }}
+            </div>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ IMPORTANT SECURITY NOTICE:</strong><br>
+            You MUST change your password immediately after your first login. This temporary password is only for initial access.
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="{{ portal_url }}" class="button">Access Patient Portal</a>
+        </div>
+        
+        <div class="features">
+            <h3 style="color: #2196F3;">What You Can Do in the Patient Portal:</h3>
+            <ul>
+                <li>View your medical records and test results</li>
+                <li>Schedule and manage appointments</li>
+                <li>Communicate securely with your healthcare team</li>
+                <li>Update your contact information</li>
+                <li>Access treatment plans and care instructions</li>
+            </ul>
+        </div>
+        
+        <h3>How to Access Your Portal:</h3>
+        <ol>
+            <li>Visit <a href="{{ portal_url }}">{{ portal_url }}</a></li>
+            <li>Click "Login"</li>
+            <li>Enter your username: <strong>{{ username }}</strong></li>
+            <li>Enter your temporary password (shown above)</li>
+            <li>You will be prompted to create a new secure password</li>
+            <li>Choose a strong password that you haven't used elsewhere</li>
+        </ol>
+        
+        <h3>Need Help?</h3>
+        <p>If you have any questions or need assistance accessing your account, please contact us at <a href="mailto:{{ support_email }}">{{ support_email }}</a></p>
+        
+        <p><strong>For your security:</strong> Never share your login credentials with anyone. Safe Haven EHR staff will never ask for your password.</p>
+        
+        <p>Thank you for choosing Safe Haven EHR for your healthcare needs.</p>
+        
+        <p>Best regards,<br>
+        <strong>Safe Haven EHR Team</strong></p>
+    </div>
+    
+    <div class="footer">
+        <p>This is an automated message. Please do not reply to this email.</p>
+        <p>&copy; 2026 Safe Haven EHR. All rights reserved.</p>
+    </div>
+</body>
+</html>

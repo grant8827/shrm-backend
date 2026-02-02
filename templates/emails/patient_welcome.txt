@@ -1,0 +1,49 @@
+Welcome to Safe Haven EHR Patient Portal
+
+Dear {{ first_name }},
+
+Welcome to Safe Haven EHR! Your healthcare provider has created a patient portal account for you to access your medical records, schedule appointments, and communicate with your care team.
+
+Your Patient Portal Access Credentials:
+----------------------------------------
+Patient Number: {{ patient_number }}
+Username: {{ username }}
+Temporary Password: {{ temporary_password }}
+
+Portal URL: {{ portal_url }}
+
+IMPORTANT SECURITY NOTICE:
+⚠️ You MUST change your password immediately after your first login.
+⚠️ This temporary password is only for initial access.
+
+How to Access Your Portal:
+---------------------------
+1. Visit {{ portal_url }}
+2. Click "Login" 
+3. Enter your username: {{ username }}
+4. Enter your temporary password (shown above)
+5. You will be prompted to create a new secure password
+6. Choose a strong password that you haven't used elsewhere
+
+What You Can Do in the Patient Portal:
+---------------------------------------
+• View your medical records and test results
+• Schedule and manage appointments
+• Communicate securely with your healthcare team
+• Update your contact information
+• Access treatment plans and care instructions
+
+Need Help?
+----------
+If you have any questions or need assistance accessing your account, please contact us:
+Email: {{ support_email }}
+
+For your security, never share your login credentials with anyone. Safe Haven EHR staff will never ask for your password.
+
+Thank you for choosing Safe Haven EHR for your healthcare needs.
+
+Best regards,
+Safe Haven EHR Team
+
+---
+This is an automated message. Please do not reply to this email.

@@ -8,6 +8,7 @@ from .models import Patient
 from users.serializers import UserListSerializer
 from users.models import User
 from django.db import transaction
+from .services import PatientRegistrationService
 import logging
 
 logger = logging.getLogger('theracare.audit')
@@ -102,9 +103,8 @@ class PatientDetailSerializer(serializers.ModelSerializer):
     emergency_contact_phone_write = serializers.CharField(write_only=True, required=False, allow_blank=True, source='emergency_contact_phone')
     emergency_contact_relationship_write = serializers.CharField(write_only=True, required=False, allow_blank=True, source='emergency_contact_relationship')
     
-    # User account fields (write-only, for creating user account)
-    username = serializers.CharField(write_only=True, required=False)
-    password = serializers.CharField(write_only=True, required=False, style={'input_type': 'password'})
+    # Optional flag to enable portal access (auto-generates username/password)
+    create_portal_access = serializers.BooleanField(write_only=True, required=False, default=True)
     
     class Meta:
         model = Patient
@@ -155,36 +155,19 @@ class PatientDetailSerializer(serializers.ModelSerializer):
     
     @transaction.atomic
     def create(self, validated_data):
-        """Create patient and optionally create associated user account."""
-        # Extract user account fields if provided
-        username = validated_data.pop('username', None)
-        password = validated_data.pop('password', None)
-        
-        # Get email for user creation
-        email = validated_data.get('email', '')
-        first_name = validated_data.get('first_name', '')
-        last_name = validated_data.get('last_name', '')
+        """Create patient and automatically create portal access with welcome email."""
+        # Check if portal access should be created (default: True)
+        create_portal = validated_data.pop('create_portal_access', True)
         
         user = None
+        username = None
+        temp_password = None
         
-        # Create user account if username and password provided
-        if username and password:
-            try:
-                user = User.objects.create_user(
-                    username=username,
-                    email=email,
-                    password=password,
-                    first_name=first_name,
-                    last_name=last_name,
-                    role='client',  # Patients are clients
-                    is_active=True
-                )
-                logger.info(f'Created user account for patient: {username}')
-            except Exception as e:
-                logger.error(f'Error creating user account for patient: {e}')
-                raise serializers.ValidationError({'username': 'Could not create user account. Username may already exist.'})
+        # Auto-generate user account credentials if portal access requested
+        if create_portal:
+            user, username, temp_password = PatientRegistrationService.create_user_account(validated_data)
         
-        # Link user to patient if created
+        # Link user to patient
         validated_data['user'] = user
         
         # Set created_by if available in context
@@ -195,54 +178,51 @@ class PatientDetailSerializer(serializers.ModelSerializer):
         # Create patient
         patient = Patient.objects.create(**validated_data)
         
-        logger.info(f'Created patient: {patient.patient_number}' + (f' with user account: {username}' if user else ''))
+        # Send welcome email with credentials (only if user was created)
+        if user and username and temp_password:
+            email_sent = PatientRegistrationService.send_welcome_email(patient, username, temp_password)
+            if email_sent:
+                logger.info(f'Created patient {patient.patient_number} with portal access. Welcome email sent to {username}')
+            else:
+                logger.warning(f'Created patient {patient.patient_number} with portal access, but welcome email failed to send')
+        else:
+            logger.info(f'Created patient {patient.patient_number} without portal access')
         
         return patient
     
     @transaction.atomic
     def update(self, instance, validated_data):
-        """Update patient and optionally update associated user account."""
-        # Extract user account fields if provided
-        username = validated_data.pop('username', None)
-        password = validated_data.pop('password', None)
+        """Update patient and sync user account if exists, or create portal access if requested."""
+        # Check if portal access should be created
+        create_portal = validated_data.pop('create_portal_access', False)
         
-        # Update user account if it exists
+        # Update existing user account
         if instance.user:
-            email = validated_data.get('email', instance.user.email)
-            first_name = validated_data.get('first_name', instance.user.first_name)
-            last_name = validated_data.get('last_name', instance.user.last_name)
+            email = validated_data.get('email')
+            first_name = validated_data.get('first_name')
+            last_name = validated_data.get('last_name')
             
-            instance.user.email = email
-            instance.user.first_name = first_name
-            instance.user.last_name = last_name
-            
-            if password:
-                instance.user.set_password(password)
+            if email:
+                instance.user.email = email
+            if first_name:
+                instance.user.first_name = first_name
+            if last_name:
+                instance.user.last_name = last_name
             
             instance.user.save()
             logger.info(f'Updated user account for patient: {instance.user.username}')
         
-        # Create user account if username and password provided but user doesn't exist
-        elif username and password:
-            try:
-                email = validated_data.get('email', '')
-                first_name = validated_data.get('first_name', '')
-                last_name = validated_data.get('last_name', '')
-                
-                user = User.objects.create_user(
-                    username=username,
-                    email=email,
-                    password=password,
-                    first_name=first_name,
-                    last_name=last_name,
-                    role='client',
-                    is_active=True
-                )
+        # Create portal access for existing patient if requested
+        elif create_portal:
+            user, username, temp_password = PatientRegistrationService.create_user_account(validated_data, instance)
+            if user:
                 instance.user = user
-                logger.info(f'Created user account for existing patient: {username}')
-            except Exception as e:
-                logger.error(f'Error creating user account for patient: {e}')
-                raise serializers.ValidationError({'username': 'Could not create user account. Username may already exist.'})
+                # Send welcome email
+                email_sent = PatientRegistrationService.send_welcome_email(instance, username, temp_password)
+                if email_sent:
+                    logger.info(f'Added portal access for existing patient {instance.patient_number}. Welcome email sent.')
+                else:
+                    logger.warning(f'Added portal access for patient {instance.patient_number}, but email failed to send')
         
         # Update patient fields
         for field, value in validated_data.items():
