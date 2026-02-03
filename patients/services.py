@@ -50,7 +50,7 @@ class PatientRegistrationService:
                 last_name=last_name,
                 role='client',
                 is_active=True,
-                requires_password_change=True  # Force password change on first login
+                must_change_password=True  # Force password change on first login
             )
             
             logger.info(f'Created user account for patient: {username} (User ID: {user.id})')
