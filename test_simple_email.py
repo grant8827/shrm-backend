@@ -19,7 +19,7 @@ def test_simple_email():
     room_id = str(uuid.uuid4())
     session_url = f"{settings.FRONTEND_URL}/telehealth/join/{room_id}"
     
-    recipient_email = "greggrant3760@gmail.com"
+    recipient_email = "grant8827@yahoo.com"
     
     print("=" * 60)
     print("SENDING SIMPLE PLAIN TEXT EMAIL")
