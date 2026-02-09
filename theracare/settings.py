@@ -215,6 +215,35 @@ CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS',
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Additional CORS settings for production
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_EXPOSE_HEADERS = [
+    'content-type',
+    'x-csrftoken',
+]
+
+CORS_PREFLIGHT_MAX_AGE = 86400  # 24 hours
+
 # HIPAA Compliance Settings
 HIPAA_SETTINGS = {
     'ENCRYPTION_KEY': config('ENCRYPTION_KEY', default='hipaa-encryption-key-change-in-production'),
