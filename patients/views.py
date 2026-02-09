@@ -10,7 +10,6 @@ from django.db.models import Q
 from django.utils import timezone
 from .models import Patient
 from .serializers import PatientListSerializer, PatientDetailSerializer
-from users.email_service import send_registration_email
 import logging
 
 logger = logging.getLogger('theracare.audit')
@@ -51,42 +50,8 @@ class PatientViewSet(viewsets.ModelViewSet):
         return queryset.none()
     
     def perform_create(self, serializer):
-        """Set created_by when creating a patient and optionally send welcome email."""
-        # Check if portal access should be created
-        create_portal_access = self.request.data.get('create_portal_access', False)
-        
+        """Set created_by when creating a patient."""
         serializer.save(created_by=self.request.user)
-        patient = serializer.instance
-        
-        # Send welcome email if portal access is requested
-        if create_portal_access and patient.email:
-            try:
-                send_registration_email(
-                    email=patient.email,
-                    first_name=patient.first_name,
-                    last_name=patient.last_name
-                )
-                logger.info(
-                    f'Welcome email sent to patient: {patient.email}',
-                    extra={
-                        'event_type': 'patient_welcome_email',
-                        'user_id': str(self.request.user.id),
-                        'patient_id': str(patient.id),
-                        'patient_email': patient.email,
-                        'timestamp': timezone.now().isoformat(),
-                    }
-                )
-            except Exception as e:
-                logger.error(
-                    f'Failed to send welcome email to {patient.email}: {str(e)}',
-                    extra={
-                        'event_type': 'patient_welcome_email_failed',
-                        'user_id': str(self.request.user.id),
-                        'patient_id': str(patient.id),
-                        'error': str(e),
-                        'timestamp': timezone.now().isoformat(),
-                    }
-                )
         
         # Audit log
         logger.info(
@@ -94,7 +59,7 @@ class PatientViewSet(viewsets.ModelViewSet):
             extra={
                 'event_type': 'patient_create',
                 'user_id': str(self.request.user.id),
-                'patient_id': str(patient.id),
+                'patient_id': str(serializer.instance.id),
                 'timestamp': timezone.now().isoformat(),
             }
         )
