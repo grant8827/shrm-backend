@@ -8,7 +8,8 @@ from .models import Patient
 from users.serializers import UserListSerializer
 from users.models import User
 from django.db import transaction
-from .services import PatientRegistrationService
+from django.core.exceptions import ValidationError as DjangoValidationError
+from .services import PatientRegistrationService, DuplicateEmailError
 import logging
 
 logger = logging.getLogger('theracare.audit')
@@ -153,6 +154,21 @@ class PatientDetailSerializer(serializers.ModelSerializer):
     def get_emergency_contact_relationship(self, obj):
         return obj.get_decrypted_field('emergency_contact_relationship')
     
+    def validate(self, attrs):
+        """Validate patient data before creation."""
+        # Check if portal access requested and email will be unique
+        create_portal = attrs.get('create_portal_access', True)
+        email = attrs.get('email', '')
+        
+        if create_portal and email:
+            # Check if email already exists in User table
+            if User.objects.filter(email=email).exists():
+                raise serializers.ValidationError({
+                    'email': f'A user with email "{email}" already exists. Each patient must have a unique email address for portal access.'
+                })
+        
+        return attrs
+    
     @transaction.atomic
     def create(self, validated_data):
         """Create patient and automatically create portal access with welcome email."""
@@ -165,7 +181,11 @@ class PatientDetailSerializer(serializers.ModelSerializer):
         
         # Auto-generate user account credentials if portal access requested
         if create_portal:
-            user, username, temp_password = PatientRegistrationService.create_user_account(validated_data)
+            try:
+                user, username, temp_password = PatientRegistrationService.create_user_account(validated_data)
+            except (DuplicateEmailError, DjangoValidationError) as e:
+                # Re-raise as serializer validation error for proper API response
+                raise serializers.ValidationError({'email': str(e)})
         
         # Link user to patient
         validated_data['user'] = user
@@ -180,11 +200,15 @@ class PatientDetailSerializer(serializers.ModelSerializer):
         
         # Send welcome email with credentials (only if user was created)
         if user and username and temp_password:
-            email_sent = PatientRegistrationService.send_welcome_email(patient, username, temp_password)
-            if email_sent:
-                logger.info(f'Created patient {patient.patient_number} with portal access. Welcome email sent to {username}')
-            else:
-                logger.warning(f'Created patient {patient.patient_number} with portal access, but welcome email failed to send')
+            try:
+                email_sent = PatientRegistrationService.send_welcome_email(patient, username, temp_password)
+                if email_sent:
+                    logger.info(f'Created patient {patient.patient_number} with portal access. Welcome email sent to {username}')
+                else:
+                    logger.warning(f'Created patient {patient.patient_number} with portal access, but welcome email failed to send')
+            except Exception as e:
+                logger.error(f'Failed to send welcome email for patient {patient.patient_number}: {e}')
+                # Don't fail patient creation if email fails - user account is already created
         else:
             logger.info(f'Created patient {patient.patient_number} without portal access')
         
@@ -202,8 +226,14 @@ class PatientDetailSerializer(serializers.ModelSerializer):
             first_name = validated_data.get('first_name')
             last_name = validated_data.get('last_name')
             
-            if email:
+            # Check if email is being changed and if new email already exists
+            if email and email != instance.user.email:
+                if User.objects.filter(email=email).exclude(id=instance.user.id).exists():
+                    raise serializers.ValidationError({
+                        'email': f'A user with email "{email}" already exists. Each patient must have a unique email address.'
+                    })
                 instance.user.email = email
+            
             if first_name:
                 instance.user.first_name = first_name
             if last_name:
@@ -214,15 +244,20 @@ class PatientDetailSerializer(serializers.ModelSerializer):
         
         # Create portal access for existing patient if requested
         elif create_portal:
-            user, username, temp_password = PatientRegistrationService.create_user_account(validated_data, instance)
-            if user:
+            try:
+                user, username, temp_password = PatientRegistrationService.create_user_account(validated_data, instance)
                 instance.user = user
                 # Send welcome email
-                email_sent = PatientRegistrationService.send_welcome_email(instance, username, temp_password)
-                if email_sent:
-                    logger.info(f'Added portal access for existing patient {instance.patient_number}. Welcome email sent.')
-                else:
-                    logger.warning(f'Added portal access for patient {instance.patient_number}, but email failed to send')
+                try:
+                    email_sent = PatientRegistrationService.send_welcome_email(instance, username, temp_password)
+                    if email_sent:
+                        logger.info(f'Added portal access for existing patient {instance.patient_number}. Welcome email sent.')
+                    else:
+                        logger.warning(f'Added portal access for patient {instance.patient_number}, but email failed to send')
+                except Exception as e:
+                    logger.error(f'Failed to send welcome email for patient {instance.patient_number}: {e}')
+            except (DuplicateEmailError, DjangoValidationError) as e:
+                raise serializers.ValidationError({'email': str(e)})
         
         # Update patient fields
         for field, value in validated_data.items():

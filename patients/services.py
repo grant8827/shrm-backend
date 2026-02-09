@@ -4,11 +4,17 @@ Service layer for patient management business logic.
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.core.exceptions import ValidationError
 from users.models import User
 from .utils import generate_username, generate_random_password
 import logging
 
 logger = logging.getLogger('theracare.audit')
+
+
+class DuplicateEmailError(ValidationError):
+    """Raised when attempting to create a user with an email that already exists."""
+    pass
 
 
 class PatientRegistrationService:
@@ -26,17 +32,28 @@ class PatientRegistrationService:
             patient_instance: Patient model instance (optional, for linking)
         
         Returns:
-            tuple: (User instance, username, temporary_password) or (None, None, None) if creation fails
+            tuple: (User instance, username, temporary_password)
+        
+        Raises:
+            ValidationError: If required fields are missing
+            DuplicateEmailError: If email already exists in the system
         """
+        email = patient_data.get('email', '')
+        first_name = patient_data.get('first_name', '')
+        last_name = patient_data.get('last_name', '')
+        
+        if not email or not first_name or not last_name:
+            error_msg = 'Cannot create user account: missing required fields (email, first_name, last_name)'
+            logger.error(error_msg)
+            raise ValidationError(error_msg)
+        
+        # Check if email already exists
+        if User.objects.filter(email=email).exists():
+            error_msg = f'A user with email "{email}" already exists. Each patient must have a unique email address.'
+            logger.error(error_msg)
+            raise DuplicateEmailError(error_msg)
+        
         try:
-            email = patient_data.get('email', '')
-            first_name = patient_data.get('first_name', '')
-            last_name = patient_data.get('last_name', '')
-            
-            if not email or not first_name or not last_name:
-                logger.error('Cannot create user account: missing required fields (email, first_name, last_name)')
-                return None, None, None
-            
             # Generate username and password
             username = generate_username(first_name, last_name)
             temporary_password = generate_random_password()
@@ -59,7 +76,7 @@ class PatientRegistrationService:
             
         except Exception as e:
             logger.error(f'Error creating user account for patient: {e}')
-            return None, None, None
+            raise
     
     @staticmethod
     def send_welcome_email(patient, username, temporary_password):
