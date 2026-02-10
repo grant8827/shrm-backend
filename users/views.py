@@ -432,10 +432,11 @@ class UserListView(generics.ListAPIView):
         
         # Additional query parameter filters (only for admins)
         if user.role == 'admin':
-            # Filter by role
+            # Filter by role (supports comma-separated values like "therapist,admin")
             role = self.request.query_params.get('role')
             if role:
-                queryset = queryset.filter(role=role)
+                roles = [r.strip() for r in role.split(',')]
+                queryset = queryset.filter(role__in=roles)
             
             # Filter by active status
             is_active = self.request.query_params.get('is_active')
