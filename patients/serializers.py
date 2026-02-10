@@ -10,6 +10,7 @@ from users.models import User
 from django.db import transaction
 from django.core.exceptions import ValidationError as DjangoValidationError
 from .services import PatientRegistrationService, DuplicateEmailError
+from users.email_service import send_registration_email
 import logging
 
 logger = logging.getLogger('theracare.audit')
@@ -198,17 +199,26 @@ class PatientDetailSerializer(serializers.ModelSerializer):
         # Create patient
         patient = Patient.objects.create(**validated_data)
         
-        # Send welcome email with credentials (only if user was created)
-        if user and username and temp_password:
+        # Send welcome email (only if user was created)
+        if user:
             try:
-                email_sent = PatientRegistrationService.send_welcome_email(patient, username, temp_password)
-                if email_sent:
-                    logger.info(f'Created patient {patient.patient_number} with portal access. Welcome email sent to {username}')
+                # Get decrypted email from the created patient instance
+                email = patient.get_decrypted_field('email')
+                first_name = patient.get_decrypted_field('first_name')
+                last_name = patient.get_decrypted_field('last_name')
+                
+                success, token = send_registration_email(
+                    email=email,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+                
+                if success:
+                    logger.info(f'Created patient {patient.patient_number} with portal access. Welcome email sent to {email}')
                 else:
                     logger.warning(f'Created patient {patient.patient_number} with portal access, but welcome email failed to send')
             except Exception as e:
                 logger.error(f'Failed to send welcome email for patient {patient.patient_number}: {e}')
-                # Don't fail patient creation if email fails - user account is already created
         else:
             logger.info(f'Created patient {patient.patient_number} without portal access')
         
