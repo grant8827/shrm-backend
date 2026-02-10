@@ -50,10 +50,13 @@ class PatientViewSet(viewsets.ModelViewSet):
         return queryset.none()
     
     def perform_create(self, serializer):
-        """Set created_by when creating a patient."""
+        """Set created_by when creating a patient.
+        
+        Note: Email sending is handled by the serializer's create() method,
+        which properly decrypts patient data and calls PatientRegistrationService.
+        """
         serializer.save(created_by=self.request.user)
         
-        # Audit log
         logger.info(
             'Patient created',
             extra={
