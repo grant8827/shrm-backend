@@ -1,12 +1,11 @@
 from django.db import models
 from django.core.validators import RegexValidator
-from core.security import encryption
 from users.models import User
 import uuid
 
 
 class Patient(models.Model):
-    """Patient model with HIPAA-compliant encrypted fields"""
+    """Patient model for managing patient information"""
     
     class Status(models.TextChoices):
         ACTIVE = 'active', 'Active'
@@ -27,33 +26,33 @@ class Patient(models.Model):
     # Link to user account (if patient has portal access)
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='patient_profile')
     
-    # Personal information (encrypted)
-    first_name = models.TextField(max_length=500, help_text="Encrypted field")
-    last_name = models.TextField(max_length=500, help_text="Encrypted field")
-    middle_name = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
+    # Personal information
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    middle_name = models.CharField(max_length=255, blank=True)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=1, choices=Gender.choices)
     
-    # Contact information (encrypted)
-    email = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
-    phone = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
-    phone_secondary = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
+    # Contact information
+    email = models.EmailField(max_length=255, blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+    phone_secondary = models.CharField(max_length=20, blank=True)
     
-    # Address (encrypted)
-    street_address = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
-    city = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
+    # Address
+    street_address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
     state = models.CharField(max_length=2, blank=True)
-    zip_code = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
+    zip_code = models.CharField(max_length=10, blank=True)
     country = models.CharField(max_length=2, default='US')
     
-    # Medical identifiers (encrypted)
-    ssn = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
-    medical_record_number = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
+    # Medical identifiers
+    ssn = models.CharField(max_length=11, blank=True)
+    medical_record_number = models.CharField(max_length=50, blank=True)
     
-    # Emergency contact (encrypted)
-    emergency_contact_name = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
-    emergency_contact_phone = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
-    emergency_contact_relationship = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
+    # Emergency contact
+    emergency_contact_name = models.CharField(max_length=255, blank=True)
+    emergency_contact_phone = models.CharField(max_length=20, blank=True)
+    emergency_contact_relationship = models.CharField(max_length=255, blank=True)
     
     # Care team
     primary_therapist = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='primary_patients')
@@ -95,21 +94,9 @@ class Patient(models.Model):
         ]
     
     def save(self, *args, **kwargs):
-        """Override save to encrypt sensitive fields and generate patient number"""
+        """Override save to generate patient number"""
         if not self.patient_number:
             self.patient_number = self.generate_patient_number()
-        
-        # Encrypt sensitive fields
-        fields_to_encrypt = [
-            'first_name', 'last_name', 'middle_name', 'email', 'phone', 'phone_secondary',
-            'street_address', 'city', 'zip_code', 'ssn', 'medical_record_number',
-            'emergency_contact_name', 'emergency_contact_phone', 'emergency_contact_relationship'
-        ]
-        
-        for field in fields_to_encrypt:
-            value = getattr(self, field, None)
-            if value and not value.startswith('gAAAAAB'):  # Not already encrypted
-                setattr(self, field, encryption.encrypt(value))
         
         super().save(*args, **kwargs)
     
@@ -133,23 +120,15 @@ class Patient(models.Model):
         return f'P{year_suffix}{new_num:06d}'
     
     def get_decrypted_field(self, field_name):
-        """Get decrypted field value"""
-        try:
-            value = getattr(self, field_name, '')
-            return encryption.decrypt(value) if value else ''
-        except:
-            return getattr(self, field_name, '')
+        """Get field value (kept for backward compatibility)"""
+        return getattr(self, field_name, '')
     
     def get_full_name(self):
-        """Get full name (decrypted)"""
-        first = self.get_decrypted_field('first_name')
-        middle = self.get_decrypted_field('middle_name')
-        last = self.get_decrypted_field('last_name')
-        
-        parts = [first]
-        if middle:
-            parts.append(middle)
-        parts.append(last)
+        """Get full name"""
+        parts = [self.first_name]
+        if self.middle_name:
+            parts.append(self.middle_name)
+        parts.append(self.last_name)
         
         return ' '.join(parts).strip()
     
@@ -198,14 +177,14 @@ class InsuranceInformation(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='insurance_plans')
     insurance_type = models.CharField(max_length=20, choices=InsuranceType.choices, default=InsuranceType.PRIMARY)
     
-    # Insurance details (encrypted)
-    provider_name = models.TextField(max_length=500, help_text="Encrypted field")
-    policy_number = models.TextField(max_length=500, help_text="Encrypted field")
-    group_number = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
-    subscriber_id = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
+    # Insurance details
+    provider_name = models.CharField(max_length=255)
+    policy_number = models.CharField(max_length=50)
+    group_number = models.CharField(max_length=50, blank=True)
+    subscriber_id = models.CharField(max_length=50, blank=True)
     
-    # Subscriber information (encrypted)
-    subscriber_name = models.TextField(max_length=500, blank=True, help_text="Encrypted field")
+    # Subscriber information
+    subscriber_name = models.CharField(max_length=255, blank=True)
     subscriber_dob = models.DateField(null=True, blank=True)
     relationship_to_patient = models.CharField(max_length=20, default='self')
     
@@ -233,31 +212,12 @@ class InsuranceInformation(models.Model):
             models.Index(fields=['is_active']),
         ]
     
-    def save(self, *args, **kwargs):
-        """Override save to encrypt sensitive fields"""
-        fields_to_encrypt = [
-            'provider_name', 'policy_number', 'group_number', 
-            'subscriber_id', 'subscriber_name'
-        ]
-        
-        for field in fields_to_encrypt:
-            value = getattr(self, field, None)
-            if value and not value.startswith('gAAAAAB'):  # Not already encrypted
-                setattr(self, field, encryption.encrypt(value))
-        
-        super().save(*args, **kwargs)
-    
     def __str__(self):
-        provider = self.get_decrypted_field('provider_name')
-        return f"{self.patient.get_full_name()} - {provider} ({self.insurance_type})"
+        return f"{self.patient.get_full_name()} - {self.provider_name} ({self.insurance_type})"
     
     def get_decrypted_field(self, field_name):
-        """Get decrypted field value"""
-        try:
-            value = getattr(self, field_name, '')
-            return encryption.decrypt(value) if value else ''
-        except:
-            return getattr(self, field_name, '')
+        """Get field value (kept for backward compatibility)"""
+        return getattr(self, field_name, '')
 
 
 class PatientDocument(models.Model):
