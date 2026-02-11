@@ -415,9 +415,10 @@ class PasswordChangeSerializer(serializers.Serializer):
         new_password = self.validated_data['new_password']
         
         user.set_password(new_password)
-        user.requires_password_change = False
+        user.must_change_password = False
         user.password_changed_at = timezone.now()
-        user.save(update_fields=['password', 'requires_password_change', 'password_changed_at'])
+        user.last_password_change = timezone.now()
+        user.save(update_fields=['password', 'must_change_password', 'password_changed_at', 'last_password_change'])
         
         # Log password change
         logger.info(
