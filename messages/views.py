@@ -8,6 +8,7 @@ from .models import Message, MessageThread
 from .serializers import MessageSerializer, MessageThreadSerializer, CreateMessageSerializer
 from users.models import User
 from audit.models import AuditLog
+from notifications.models import Notification
 import logging
 import traceback
 
@@ -106,6 +107,21 @@ class MessageViewSet(viewsets.ModelViewSet):
             logger.info("Saving message")
             message.save()
             logger.info(f"Message saved: {message.id}")
+            
+            # Create notifications for recipients
+            try:
+                for recipient in recipients:
+                    Notification.objects.create(
+                        user=recipient,
+                        notification_type='message',
+                        title='New Message',
+                        message='You have a message',
+                        related_object_id=message.id
+                    )
+                logger.info(f"Created notifications for {len(recipients)} recipients")
+            except Exception as notif_error:
+                logger.warning(f"Failed to create notifications: {str(notif_error)}")
+                # Continue even if notification creation fails
             
             # Log audit
             try:

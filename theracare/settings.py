@@ -57,6 +57,7 @@ LOCAL_APPS = [
     'messages.apps.MessagesConfig',  # Use explicit config to avoid conflict with django.contrib.messages
     'telehealth',
     'soap_notes',
+    'notifications',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

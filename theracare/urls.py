@@ -29,6 +29,7 @@ api_urlpatterns = [
     path('soap-notes/', include('soap_notes.urls')),
     path('telehealth/', include('telehealth.urls')),
     path('audit/', include('audit.urls')),
+    path('notifications/', include('notifications.urls')),
     path('health/', include('core.urls')),
 ]
 
