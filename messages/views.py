@@ -115,7 +115,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                         user=recipient,
                         notification_type='message',
                         title='New Message',
-                        message='You have a message',
+                        message='You have a new message',
                         related_object_id=message.id
                     )
                 logger.info(f"Created notifications for {len(recipients)} recipients")
