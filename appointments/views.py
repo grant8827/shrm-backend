@@ -29,8 +29,11 @@ class AppointmentPermission(permissions.BasePermission):
         if request.user.role == 'therapist':
             return True
         
-        # Clients can view (GET) and update status (PATCH)
+        # Clients can view (GET), update status (PATCH), and confirm/cancel (POST to specific actions)
         if request.user.role == 'client':
+            # Allow POST for specific client actions like confirm and cancel
+            if request.method == 'POST' and view.action in ['confirm', 'cancel']:
+                return True
             return request.method in permissions.SAFE_METHODS or request.method == 'PATCH'
         
         return False
@@ -47,7 +50,9 @@ class AppointmentPermission(permissions.BasePermission):
         # Clients can view and update status of their own appointments
         if request.user.role == 'client':
             if obj.patient == request.user:
-                # Allow viewing and PATCH (for status updates)
+                # Allow viewing, PATCH, and POST for confirm/cancel actions
+                if request.method == 'POST' and view.action in ['confirm', 'cancel']:
+                    return True
                 return request.method in permissions.SAFE_METHODS or request.method == 'PATCH'
         
         return False
