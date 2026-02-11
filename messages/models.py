@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from core.security import encrypt_field, decrypt_field
 import uuid
 
 User = get_user_model()
@@ -28,20 +27,12 @@ class Message(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     thread = models.ForeignKey(MessageThread, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
-    content_encrypted = models.TextField()
+    content = models.TextField()
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='normal')
     is_read = models.BooleanField(default=False)
     is_starred = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     read_at = models.DateTimeField(null=True, blank=True)
-
-    @property
-    def content(self):
-        return decrypt_field(self.content_encrypted)
-
-    @content.setter
-    def content(self, value):
-        self.content_encrypted = encrypt_field(value)
 
     class Meta:
         db_table = 'messages'

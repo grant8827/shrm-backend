@@ -10,16 +10,11 @@ class MessageAttachmentSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserSerializer(read_only=True)
     attachments = MessageAttachmentSerializer(many=True, read_only=True)
-    content = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
         fields = ['id', 'sender', 'content', 'priority', 'is_read', 'is_starred', 
                  'created_at', 'read_at', 'attachments']
-    
-    def get_content(self, obj):
-        """Return decrypted message content"""
-        return obj.content  # Uses the @property which decrypts
 
 class MessageThreadSerializer(serializers.ModelSerializer):
     participants = UserSerializer(many=True, read_only=True)
