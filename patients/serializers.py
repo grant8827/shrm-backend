@@ -8,8 +8,6 @@ from .models import Patient
 from users.serializers import UserListSerializer
 from users.models import User
 from django.db import transaction
-from django.core.exceptions import ValidationError as DjangoValidationError
-from .services import PatientRegistrationService, DuplicateEmailError
 from users.email_service import send_registration_email
 import logging
 
@@ -17,12 +15,8 @@ logger = logging.getLogger('theracare.audit')
 
 
 class PatientListSerializer(serializers.ModelSerializer):
-    """Serializer for patient list with decrypted fields."""
+    """Serializer for patient list."""
     
-    first_name = serializers.SerializerMethodField()
-    last_name = serializers.SerializerMethodField()
-    phone = serializers.SerializerMethodField()
-    email = serializers.SerializerMethodField()
     primary_therapist_name = serializers.SerializerMethodField()
     
     class Meta:
@@ -46,22 +40,6 @@ class PatientListSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'patient_number', 'created_at', 'updated_at']
     
-    def get_first_name(self, obj):
-        """Decrypt first name."""
-        return obj.get_decrypted_field('first_name')
-    
-    def get_last_name(self, obj):
-        """Decrypt last name."""
-        return obj.get_decrypted_field('last_name')
-    
-    def get_phone(self, obj):
-        """Decrypt phone."""
-        return obj.get_decrypted_field('phone')
-    
-    def get_email(self, obj):
-        """Decrypt email."""
-        return obj.get_decrypted_field('email')
-    
     def get_primary_therapist_name(self, obj):
         """Get primary therapist full name."""
         if obj.primary_therapist:
@@ -70,26 +48,11 @@ class PatientListSerializer(serializers.ModelSerializer):
 
 
 class PatientDetailSerializer(serializers.ModelSerializer):
-    """Serializer for detailed patient view with all decrypted fields."""
+    """Serializer for detailed patient view."""
     
-    # Read fields (decrypted)
-    first_name = serializers.SerializerMethodField()
-    last_name = serializers.SerializerMethodField()
-    middle_name = serializers.SerializerMethodField()
-    phone = serializers.SerializerMethodField()
-    phone_secondary = serializers.SerializerMethodField()
-    email = serializers.SerializerMethodField()
-    street_address = serializers.SerializerMethodField()
-    city = serializers.SerializerMethodField()
-    zip_code = serializers.SerializerMethodField()
-    ssn = serializers.SerializerMethodField()
-    medical_record_number = serializers.SerializerMethodField()
-    emergency_contact_name = serializers.SerializerMethodField()
-    emergency_contact_phone = serializers.SerializerMethodField()
-    emergency_contact_relationship = serializers.SerializerMethodField()
     primary_therapist_info = UserListSerializer(source='primary_therapist', read_only=True)
     
-    # Write fields (for create/update)
+    # Write fields (for create/update) - use _write suffix to avoid conflicts
     first_name_write = serializers.CharField(write_only=True, required=True, source='first_name')
     last_name_write = serializers.CharField(write_only=True, required=True, source='last_name')
     middle_name_write = serializers.CharField(write_only=True, required=False, allow_blank=True, source='middle_name')
@@ -113,48 +76,6 @@ class PatientDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id', 'patient_number', 'created_at', 'updated_at', 'created_by']
     
-    def get_first_name(self, obj):
-        return obj.get_decrypted_field('first_name')
-    
-    def get_last_name(self, obj):
-        return obj.get_decrypted_field('last_name')
-    
-    def get_middle_name(self, obj):
-        return obj.get_decrypted_field('middle_name')
-    
-    def get_phone(self, obj):
-        return obj.get_decrypted_field('phone')
-    
-    def get_phone_secondary(self, obj):
-        return obj.get_decrypted_field('phone_secondary')
-    
-    def get_email(self, obj):
-        return obj.get_decrypted_field('email')
-    
-    def get_street_address(self, obj):
-        return obj.get_decrypted_field('street_address')
-    
-    def get_city(self, obj):
-        return obj.get_decrypted_field('city')
-    
-    def get_zip_code(self, obj):
-        return obj.get_decrypted_field('zip_code')
-    
-    def get_ssn(self, obj):
-        return obj.get_decrypted_field('ssn')
-    
-    def get_medical_record_number(self, obj):
-        return obj.get_decrypted_field('medical_record_number')
-    
-    def get_emergency_contact_name(self, obj):
-        return obj.get_decrypted_field('emergency_contact_name')
-    
-    def get_emergency_contact_phone(self, obj):
-        return obj.get_decrypted_field('emergency_contact_phone')
-    
-    def get_emergency_contact_relationship(self, obj):
-        return obj.get_decrypted_field('emergency_contact_relationship')
-    
     def validate(self, attrs):
         """Validate patient data before creation."""
         # Check if portal access requested and email will be unique
@@ -172,24 +93,12 @@ class PatientDetailSerializer(serializers.ModelSerializer):
     
     @transaction.atomic
     def create(self, validated_data):
-        """Create patient and automatically create portal access with welcome email."""
+        """Create patient and send token-based registration email for portal access."""
         # Check if portal access should be created (default: True)
         create_portal = validated_data.pop('create_portal_access', True)
         
-        user = None
-        username = None
-        temp_password = None
-        
-        # Auto-generate user account credentials if portal access requested
-        if create_portal:
-            try:
-                user, username, temp_password = PatientRegistrationService.create_user_account(validated_data)
-            except (DuplicateEmailError, DjangoValidationError) as e:
-                # Re-raise as serializer validation error for proper API response
-                raise serializers.ValidationError({'email': str(e)})
-        
-        # Link user to patient
-        validated_data['user'] = user
+        # Token-based flow creates user later when patient completes registration
+        validated_data['user'] = None
         
         # Set created_by if available in context
         request = self.context.get('request')
@@ -199,13 +108,13 @@ class PatientDetailSerializer(serializers.ModelSerializer):
         # Create patient
         patient = Patient.objects.create(**validated_data)
         
-        # Send welcome email (only if user was created)
-        if user:
+        # Send registration completion email (token-based)
+        if create_portal:
             try:
-                # Get decrypted email from the created patient instance
-                email = patient.get_decrypted_field('email')
-                first_name = patient.get_decrypted_field('first_name')
-                last_name = patient.get_decrypted_field('last_name')
+                # Get email from the created patient instance
+                email = patient.email
+                first_name = patient.first_name
+                last_name = patient.last_name
                 
                 success, token = send_registration_email(
                     email=email,
@@ -214,11 +123,11 @@ class PatientDetailSerializer(serializers.ModelSerializer):
                 )
                 
                 if success:
-                    logger.info(f'Created patient {patient.patient_number} with portal access. Welcome email sent to {email}')
+                    logger.info(f'Created patient {patient.patient_number}. Registration email sent to {email}')
                 else:
-                    logger.warning(f'Created patient {patient.patient_number} with portal access, but welcome email failed to send')
+                    logger.warning(f'Created patient {patient.patient_number}, but registration email failed to send')
             except Exception as e:
-                logger.error(f'Failed to send welcome email for patient {patient.patient_number}: {e}')
+                logger.error(f'Failed to send registration email for patient {patient.patient_number}: {e}')
         else:
             logger.info(f'Created patient {patient.patient_number} without portal access')
         
@@ -226,7 +135,7 @@ class PatientDetailSerializer(serializers.ModelSerializer):
     
     @transaction.atomic
     def update(self, instance, validated_data):
-        """Update patient and sync user account if exists, or create portal access if requested."""
+        """Update patient and optionally send registration email for portal access."""
         # Check if portal access should be created
         create_portal = validated_data.pop('create_portal_access', False)
         
@@ -252,22 +161,24 @@ class PatientDetailSerializer(serializers.ModelSerializer):
             instance.user.save()
             logger.info(f'Updated user account for patient: {instance.user.username}')
         
-        # Create portal access for existing patient if requested
+        # Create portal access for existing patient if requested (token-based email)
         elif create_portal:
+            email = validated_data.get('email', instance.email)
+            first_name = validated_data.get('first_name', instance.first_name)
+            last_name = validated_data.get('last_name', instance.last_name)
+
             try:
-                user, username, temp_password = PatientRegistrationService.create_user_account(validated_data, instance)
-                instance.user = user
-                # Send welcome email
-                try:
-                    email_sent = PatientRegistrationService.send_welcome_email(instance, username, temp_password)
-                    if email_sent:
-                        logger.info(f'Added portal access for existing patient {instance.patient_number}. Welcome email sent.')
-                    else:
-                        logger.warning(f'Added portal access for patient {instance.patient_number}, but email failed to send')
-                except Exception as e:
-                    logger.error(f'Failed to send welcome email for patient {instance.patient_number}: {e}')
-            except (DuplicateEmailError, DjangoValidationError) as e:
-                raise serializers.ValidationError({'email': str(e)})
+                success, _ = send_registration_email(
+                    email=email,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+                if success:
+                    logger.info(f'Registration email sent for existing patient {instance.patient_number}.')
+                else:
+                    logger.warning(f'Failed to send registration email for patient {instance.patient_number}.')
+            except Exception as e:
+                logger.error(f'Failed to send registration email for patient {instance.patient_number}: {e}')
         
         # Update patient fields
         for field, value in validated_data.items():

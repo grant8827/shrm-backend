@@ -671,5 +671,26 @@ class CompleteRegistrationSerializer(serializers.Serializer):
         
         # Mark token as used
         token.mark_as_used(user)
+
+        # Link user to patient record created earlier (if present)
+        try:
+            from patients.models import Patient
+
+            patient = (
+                Patient.objects.filter(
+                    user__isnull=True,
+                    email__iexact=token.email,
+                    first_name__iexact=token.first_name,
+                    last_name__iexact=token.last_name,
+                )
+                .order_by('-created_at')
+                .first()
+            )
+
+            if patient:
+                patient.user = user
+                patient.save(update_fields=['user'])
+        except Exception as e:
+            logger.error(f'Failed to link patient record for registration token {token.id}: {e}')
         
         return user

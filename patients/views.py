@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.utils import timezone
 from .models import Patient
 from .serializers import PatientListSerializer, PatientDetailSerializer
-from .services import PatientRegistrationService
+from users.email_service import send_registration_email
 import logging
 
 logger = logging.getLogger('theracare.audit')
@@ -54,7 +54,7 @@ class PatientViewSet(viewsets.ModelViewSet):
         """Set created_by when creating a patient.
         
         Note: Email sending is handled by the serializer's create() method,
-        which properly decrypts patient data and calls PatientRegistrationService.
+        which sends token-based registration emails when portal access is requested.
         """
         serializer.save(created_by=self.request.user)
         
@@ -113,43 +113,37 @@ class PatientViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['post'])
     def resend_welcome_email(self, request, pk=None):
-        """Resend welcome email with login credentials to patient."""
+        """Resend token-based registration email to patient."""
         patient = self.get_object()
         
         # Check if user has permission (admin or therapist only)
         if request.user.role not in ['admin', 'therapist']:
             return Response(
-                {'error': 'Only administrators and therapists can resend welcome emails'},
+                {'error': 'Only administrators and therapists can resend registration emails'},
                 status=status.HTTP_403_FORBIDDEN
             )
         
-        # Check if patient has a user account
-        if not patient.user:
+        # Registration email is only for patients without an existing user account
+        if patient.user:
             return Response(
-                {'error': 'Patient does not have a user account'},
+                {'error': 'Patient already has portal access. Use password reset instead.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not patient.email:
+            return Response(
+                {'error': 'Patient does not have an email address'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        # Get username from patient's user account
-        username = patient.user.email
-        
-        # Note: We cannot retrieve the original temporary password as it's hashed
-        # We'll need to generate a new temporary password
-        from django.contrib.auth.hashers import make_password
-        import secrets
-        import string
-        
-        # Generate new temporary password
-        temp_password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
-        
-        # Update user password and set must_change_password flag
-        patient.user.password = make_password(temp_password)
-        patient.user.must_change_password = True
-        patient.user.save(update_fields=['password', 'must_change_password'])
-        
-        # Send welcome email
+        # Send registration email
         try:
-            email_sent = PatientRegistrationService.send_welcome_email(patient, username, temp_password)
+            email_sent, _ = send_registration_email(
+                email=patient.email,
+                first_name=patient.first_name,
+                last_name=patient.last_name,
+                phone_number=patient.phone or ''
+            )
             
             logger.info(
                 'Welcome email resent',
@@ -163,7 +157,7 @@ class PatientViewSet(viewsets.ModelViewSet):
             
             if email_sent:
                 return Response({
-                    'message': 'Welcome email sent successfully',
+                    'message': 'Registration email sent successfully',
                     'email': patient.email
                 })
             else:
