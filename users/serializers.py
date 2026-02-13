@@ -9,6 +9,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import IntegrityError
 from django.utils import timezone
 from django.conf import settings
 from .models import User, RegistrationToken
@@ -643,6 +644,12 @@ class CompleteRegistrationSerializer(serializers.Serializer):
         """Validate passwords match"""
         if attrs['password'] != attrs['password_confirm']:
             raise serializers.ValidationError({'password_confirm': 'Passwords do not match.'})
+
+        token = RegistrationToken.objects.get(token=attrs['token'])
+        if User.objects.filter(email__iexact=token.email).exists():
+            raise serializers.ValidationError({
+                'token': 'An account for this email already exists. Please sign in or reset your password.'
+            })
         
         # Validate password strength
         try:
@@ -656,18 +663,23 @@ class CompleteRegistrationSerializer(serializers.Serializer):
         """Create user from registration token"""
         token_value = validated_data['token']
         token = RegistrationToken.objects.get(token=token_value)
-        
-        # Create user account
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=token.email,
-            password=validated_data['password'],
-            first_name=token.first_name,
-            last_name=token.last_name,
-            phone=token.phone_number,
-            role=User.Role.CLIENT,
-            status=User.Status.ACTIVE
-        )
+
+        try:
+            # Create user account
+            user = User.objects.create_user(
+                username=validated_data['username'],
+                email=token.email,
+                password=validated_data['password'],
+                first_name=token.first_name,
+                last_name=token.last_name,
+                phone=token.phone_number,
+                role=User.Role.CLIENT,
+                status=User.Status.ACTIVE
+            )
+        except IntegrityError:
+            raise serializers.ValidationError({
+                'token': 'An account for this email already exists. Please sign in or reset your password.'
+            })
         
         # Mark token as used
         token.mark_as_used(user)

@@ -701,7 +701,28 @@ def complete_registration(request):
     serializer = CompleteRegistrationSerializer(data=request.data)
     
     if serializer.is_valid():
-        user = serializer.save()
+        try:
+            user = serializer.save()
+        except Exception as e:
+            logger.exception(
+                'Registration completion failed during save',
+                extra={
+                    'event_type': 'registration_completion_error',
+                    'token': request.data.get('token', ''),
+                    'username': request.data.get('username', ''),
+                    'timestamp': timezone.now().isoformat(),
+                }
+            )
+
+            from rest_framework.exceptions import ValidationError as DRFValidationError
+
+            if isinstance(e, DRFValidationError):
+                return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response(
+                {'error': 'Unable to complete registration. Please try again or contact support.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
         
         # Log successful registration
         logger.info(
