@@ -75,6 +75,13 @@ class PatientDetailSerializer(serializers.ModelSerializer):
         model = Patient
         fields = '__all__'
         read_only_fields = ['id', 'patient_number', 'created_at', 'updated_at', 'created_by']
+
+    def get_fields(self):
+        fields = super().get_fields()
+        for field_name in ['first_name', 'last_name', 'email', 'phone']:
+            if field_name in fields:
+                fields[field_name].required = False
+        return fields
     
     def validate(self, attrs):
         """Validate patient data before creation."""
