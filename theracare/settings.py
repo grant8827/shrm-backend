@@ -312,8 +312,13 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
 # Channels Configuration (for WebSockets)
-# Check if Redis URL is provided, otherwise use in-memory layer
-REDIS_URL = config('REDIS_URL', default=None)
+# Accept common Railway/Redis variable names and fall back to in-memory for local single-process runs.
+REDIS_URL = (
+    config('REDIS_URL', default='')
+    or config('REDIS_PRIVATE_URL', default='')
+    or config('REDIS_PUBLIC_URL', default='')
+    or None
+)
 
 if REDIS_URL:
     # Use Redis when REDIS_URL is provided
