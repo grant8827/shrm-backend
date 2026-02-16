@@ -104,8 +104,10 @@ DB_CONNECTION = config('DB_CONNECTION', default='postgresql')
 if config('DATABASE_URL', default=None):
     # Use DATABASE_URL for Railway PostgreSQL
     DATABASES = {
-        'default': dj_database_url.parse(
-            config('DATABASE_URL', default='postgresql://postgres:cIEHVGVBrmKtceHzOhyiNeBNCOJxdWma@gondola.proxy.rlwy.net:16249/railway')
+        'default': dj_database_url.config(
+            default=config('DATABASE_URL'),
+            conn_max_age=600,
+            conn_health_checks=True,
         )
     }
 else:
