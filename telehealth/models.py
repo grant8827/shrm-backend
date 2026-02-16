@@ -91,3 +91,44 @@ class TelehealthSession(models.Model):
             delta = self.ended_at - self.started_at
             return int(delta.total_seconds() / 60)
         return None
+
+
+class TelehealthTranscript(models.Model):
+    """Persisted transcript for a telehealth session."""
+
+    session = models.OneToOneField(
+        TelehealthSession,
+        on_delete=models.CASCADE,
+        related_name='transcript_record'
+    )
+    patient = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='telehealth_transcripts_as_patient',
+        null=True,
+        blank=True
+    )
+    therapist = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='telehealth_transcripts_as_therapist'
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='telehealth_transcripts_created'
+    )
+    transcript = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'telehealth_transcript'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['therapist', 'created_at']),
+            models.Index(fields=['patient', 'created_at']),
+        ]
+
+    def __str__(self):
+        return f"Transcript for session {self.session_id}"

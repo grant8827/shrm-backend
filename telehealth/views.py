@@ -12,8 +12,8 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
-from .models import TelehealthSession
-from .serializers import TelehealthSessionSerializer, TelehealthSessionCreateSerializer
+from .models import TelehealthSession, TelehealthTranscript
+from .serializers import TelehealthSessionSerializer, TelehealthSessionCreateSerializer, TelehealthTranscriptSerializer
 import logging
 import uuid
 import threading
@@ -222,6 +222,75 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
         )
         
         serializer = self.get_serializer(session)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def save_transcript(self, request, pk=None):
+        """Save or update transcript text for a session."""
+        if request.user.role not in ['admin', 'therapist']:
+            return Response(
+                {'error': 'Only therapists and admins can save transcripts.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        session = self.get_object()
+
+        if str(session.therapist_id) != str(request.user.id):
+            return Response(
+                {'error': 'You can only save transcripts for your own sessions.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        transcript_text = (request.data.get('transcript') or '').strip()
+        if not transcript_text:
+            return Response(
+                {'error': 'Transcript text is required.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        transcript_record, _ = TelehealthTranscript.objects.update_or_create(
+            session=session,
+            defaults={
+                'patient': session.patient,
+                'therapist': session.therapist,
+                'created_by': request.user,
+                'transcript': transcript_text,
+            }
+        )
+
+        if not session.has_transcript:
+            session.has_transcript = True
+            session.save(update_fields=['has_transcript'])
+
+        logger.info(
+            'Telehealth transcript saved',
+            extra={
+                'event_type': 'telehealth_transcript_saved',
+                'session_id': str(session.id),
+                'saved_by': str(request.user.id),
+                'timestamp': timezone.now().isoformat(),
+            }
+        )
+
+        serializer = TelehealthTranscriptSerializer(transcript_record)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'])
+    def transcripts(self, request):
+        """List saved transcripts for the authenticated therapist/admin's own sessions."""
+        if request.user.role not in ['admin', 'therapist']:
+            return Response(
+                {'error': 'Only therapists and admins can view transcripts.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        transcripts = TelehealthTranscript.objects.select_related(
+            'session', 'patient', 'therapist', 'created_by'
+        ).filter(
+            Q(session__therapist=request.user) | Q(created_by=request.user)
+        ).distinct().order_by('-created_at')
+
+        serializer = TelehealthTranscriptSerializer(transcripts, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['post'])

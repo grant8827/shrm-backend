@@ -4,7 +4,7 @@ Telehealth serializers for TheraCare EHR System.
 """
 
 from rest_framework import serializers
-from .models import TelehealthSession
+from .models import TelehealthSession, TelehealthTranscript
 from users.serializers import UserListSerializer
 
 
@@ -73,3 +73,38 @@ class TelehealthSessionCreateSerializer(serializers.ModelSerializer):
                 "Scheduled time must be in the future."
             )
         return value
+
+
+class TelehealthTranscriptSerializer(serializers.ModelSerializer):
+    """Serializer for persisted telehealth transcripts."""
+
+    session_time = serializers.DateTimeField(source='session.scheduled_at', read_only=True)
+    session_title = serializers.CharField(source='session.title', read_only=True)
+    patient_name = serializers.SerializerMethodField()
+    therapist_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TelehealthTranscript
+        fields = [
+            'id',
+            'session',
+            'session_time',
+            'session_title',
+            'patient',
+            'patient_name',
+            'therapist',
+            'therapist_name',
+            'created_by',
+            'transcript',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+    def get_patient_name(self, obj):
+        if not obj.patient:
+            return 'Unknown Patient'
+        return f"{obj.patient.first_name or ''} {obj.patient.last_name or ''}".strip() or obj.patient.email
+
+    def get_therapist_name(self, obj):
+        return f"{obj.therapist.first_name or ''} {obj.therapist.last_name or ''}".strip() or obj.therapist.email
