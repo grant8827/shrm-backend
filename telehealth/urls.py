@@ -11,5 +11,6 @@ router.register(r'sessions', TelehealthSessionViewSet, basename='telehealth-sess
 
 # URL patterns
 urlpatterns = [
+    path('sessions/transcripts/', TelehealthSessionViewSet.as_view({'get': 'transcripts'}), name='telehealth-transcripts'),
     path('', include(router.urls)),
 ]

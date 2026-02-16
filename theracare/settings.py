@@ -100,26 +100,38 @@ ASGI_APPLICATION = 'theracare.asgi.application'
 # Database Configuration
 # Use DATABASE_URL if provided (for Railway/PostgreSQL), otherwise use individual DB variables
 DB_CONNECTION = config('DB_CONNECTION', default='postgresql')
+DATABASE_URL = (
+    config('DATABASE_URL', default='')
+    or config('POSTGRES_URL', default='')
+    or config('POSTGRESQL_URL', default='')
+    or ''
+)
 
-if config('DATABASE_URL', default=None):
+if DATABASE_URL:
     # Use DATABASE_URL for Railway PostgreSQL
     DATABASES = {
         'default': dj_database_url.config(
-            default=config('DATABASE_URL'),
+            default=DATABASE_URL,
             conn_max_age=600,
             conn_health_checks=True,
         )
     }
 else:
     # Use individual database variables for MySQL or other databases
+    db_name = config('DB_DATABASE', default=config('PGDATABASE', default='railway'))
+    db_user = config('DB_USERNAME', default=config('PGUSER', default='postgres'))
+    db_password = config('DB_PASSWORD', default=config('PGPASSWORD', default=''))
+    db_host = config('DB_HOST', default=config('PGHOST', default='127.0.0.1'))
+    db_port = config('DB_PORT', default=config('PGPORT', default='3306' if DB_CONNECTION == 'mysql' else '5432'))
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql' if DB_CONNECTION == 'mysql' else 'django.db.backends.postgresql',
-            'NAME': config('DB_DATABASE', default='railway'),
-            'USER': config('DB_USERNAME', default='postgres'),
-            'PASSWORD': config('DB_PASSWORD', default=''),
-            'HOST': config('DB_HOST', default='127.0.0.1'),
-            'PORT': config('DB_PORT', default='3306' if DB_CONNECTION == 'mysql' else '5432'),
+            'NAME': db_name,
+            'USER': db_user,
+            'PASSWORD': db_password,
+            'HOST': db_host,
+            'PORT': db_port,
         }
     }
 
