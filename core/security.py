@@ -236,5 +236,5 @@ def decrypt_field(encrypted_value: str) -> str:
     try:
         return encryption.decrypt(encrypted_value)
     except Exception as e:
-        logger.error(f"Field decryption error: {str(e)}")
-        return encrypted_value  # Return encrypted value if decryption fails
+        logger.error(f"Field decryption error: {str(e)} - This likely means the ENCRYPTION_KEY has changed or is different between environments")
+        return "[Message could not be decrypted - encryption key mismatch]"  # Clear error message instead of gibberish

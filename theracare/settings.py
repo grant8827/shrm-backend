@@ -286,12 +286,14 @@ CSP_IMG_SRC = ("'self'", "data:")
 
 if DEBUG:
     # Development - allow local connections
-    CSP_CONNECT_SRC = ("'self'", "localhost:3000", "localhost:5173", "localhost:5174", "localhost:8000", "127.0.0.1:3000", "127.0.0.1:5173", "127.0.0.1:5174", "127.0.0.1:8000", "ws:", "wss:")
+    CSP_CONNECT_SRC = ("'self'", "localhost:3000", "localhost:5173", "localhost:5174", "localhost:8000", "127.0.0.1:3000", "127.0.0.1:5173", "127.0.0.1:5174", "127.0.0.1:8000", "ws:", "wss:", "ws://localhost:8000", "ws://127.0.0.1:8000")
     CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'")  # Needed for Vite dev
+    CSP_MEDIA_SRC = ("'self'", "blob:", "mediastream:")  # Allow camera/microphone streams
 else:
     # Production - allow Railway backend
     CSP_CONNECT_SRC = ("'self'", "https://shrm-backend-production.up.railway.app", "https://shrm-frontend.up.railway.app", "wss://shrm-backend-production.up.railway.app", "ws:", "wss:")
     CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")
+    CSP_MEDIA_SRC = ("'self'", "blob:", "mediastream:")  # Allow camera/microphone streams
 
 # Email Configuration
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
