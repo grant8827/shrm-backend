@@ -15,17 +15,17 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-theracare-dev-key-cha
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1,healthcheck.railway.app,.railway.app,shrm-backend-production.up.railway.app,shrm-frontend.up.railway.app',
+    cast=lambda v: [s.strip() for s in v.split(',')]
+)
 
-# Add Railway's health check domain and allow all Railway domains
-if 'healthcheck.railway.app' not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS.append('healthcheck.railway.app')
-
-# In production, allow all hosts if ALLOWED_HOSTS only has localhost
-# This is necessary for Railway deployments where the domain may change
-if not DEBUG or config('RAILWAY_ENVIRONMENT', default=None):
-    if all(host in ['localhost', '127.0.0.1', 'healthcheck.railway.app'] for host in ALLOWED_HOSTS):
-        ALLOWED_HOSTS = ['*']
+# Ensure Railway domains are present when deploying in Railway environment
+if config('RAILWAY_ENVIRONMENT', default=None):
+    for host in ['healthcheck.railway.app', '.railway.app']:
+        if host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(host)
 
 # Application definition
 DJANGO_APPS = [
@@ -224,7 +224,7 @@ SIMPLE_JWT = {
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', 
-    default='http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174',
+    default='http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174,https://shrm-frontend.up.railway.app,https://shrm-backend-production.up.railway.app',
     cast=lambda v: [s.strip() for s in v.split(',')]
 )
 
@@ -288,7 +288,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = True
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', 
-    default='http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174',
+    default='http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174,https://shrm-frontend.up.railway.app,https://shrm-backend-production.up.railway.app',
     cast=lambda v: [s.strip() for s in v.split(',')]
 )
 
