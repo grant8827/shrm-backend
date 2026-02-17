@@ -466,8 +466,3 @@ os.makedirs(BASE_DIR / 'logs', exist_ok=True)
 
 # Frontend URL for email templates
 FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:5173')
-
-# LiveKit Configuration (managed WebRTC)
-LIVEKIT_URL = config('LIVEKIT_URL', default='')
-LIVEKIT_API_KEY = config('LIVEKIT_API_KEY', default='')
-LIVEKIT_API_SECRET = config('LIVEKIT_API_SECRET', default='')
