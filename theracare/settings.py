@@ -339,7 +339,7 @@ REDIS_URL = (
 
 IS_PRODUCTION_RUNTIME = (not DEBUG) or bool(config('RAILWAY_ENVIRONMENT', default=None))
 ALLOW_INMEMORY_CHANNEL_LAYER = config('ALLOW_INMEMORY_CHANNEL_LAYER', default=False, cast=bool)
-MANAGEMENT_COMMANDS_ALLOWLIST = {'check', 'makemigrations', 'migrate', 'collectstatic', 'shell', 'test'}
+MANAGEMENT_COMMANDS_ALLOWLIST = {'check', 'makemigrations', 'migrate', 'collectstatic', 'shell', 'test', 'runserver'}
 IS_MANAGEMENT_COMMAND = len(sys.argv) > 1 and sys.argv[1] in MANAGEMENT_COMMANDS_ALLOWLIST
 
 if IS_PRODUCTION_RUNTIME and not IS_MANAGEMENT_COMMAND and not REDIS_URL and not ALLOW_INMEMORY_CHANNEL_LAYER:
