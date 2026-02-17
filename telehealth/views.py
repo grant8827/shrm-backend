@@ -17,6 +17,9 @@ from .serializers import TelehealthSessionSerializer, TelehealthSessionCreateSer
 import logging
 import uuid
 import threading
+import time
+import json
+import jwt
 
 logger = logging.getLogger('theracare.audit')
 
@@ -292,6 +295,83 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
 
         serializer = TelehealthTranscriptSerializer(transcripts, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def livekit_token(self, request, pk=None):
+        """Issue a short-lived LiveKit access token for session participants."""
+        session = self.get_object()
+
+        livekit_url = getattr(settings, 'LIVEKIT_URL', '').strip()
+        livekit_api_key = getattr(settings, 'LIVEKIT_API_KEY', '').strip()
+        livekit_api_secret = getattr(settings, 'LIVEKIT_API_SECRET', '').strip()
+
+        if not livekit_url or not livekit_api_key or not livekit_api_secret:
+            return Response(
+                {'error': 'LiveKit is not configured on the server.'},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+
+        if request.user.role == 'client' and session.patient_id != request.user.id:
+            return Response(
+                {'error': 'You can only join your own session.'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if request.user.role in ['therapist', 'staff'] and session.therapist_id != request.user.id:
+            return Response(
+                {'error': 'You can only join sessions assigned to you.'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        room_name = session.room_id or f"telehealth-{session.id}"
+        identity = f"{request.user.role}-{request.user.id}"
+        display_name = f"{request.user.first_name} {request.user.last_name}".strip() or request.user.email
+
+        now = int(time.time())
+        expires_at = now + 60 * 60  # 1 hour
+
+        payload = {
+            'iss': livekit_api_key,
+            'sub': identity,
+            'nbf': now - 10,
+            'exp': expires_at,
+            'name': display_name,
+            'metadata': json.dumps({
+                'user_id': str(request.user.id),
+                'role': request.user.role,
+                'session_id': str(session.id),
+            }),
+            'video': {
+                'roomJoin': True,
+                'room': room_name,
+                'canPublish': True,
+                'canSubscribe': True,
+            },
+        }
+
+        token = jwt.encode(payload, livekit_api_secret, algorithm='HS256')
+        if isinstance(token, bytes):
+            token = token.decode('utf-8')
+
+        logger.info(
+            'LiveKit token issued',
+            extra={
+                'event_type': 'livekit_token_issued',
+                'session_id': str(session.id),
+                'user_id': str(request.user.id),
+                'timestamp': timezone.now().isoformat(),
+            }
+        )
+
+        return Response(
+            {
+                'token': token,
+                'url': livekit_url,
+                'room': room_name,
+                'expires_at': expires_at,
+            },
+            status=status.HTTP_200_OK,
+        )
 
     @action(detail=False, methods=['post'])
     def create_emergency(self, request):
