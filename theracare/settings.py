@@ -3,6 +3,7 @@ import os
 import sys
 from pathlib import Path
 from datetime import timedelta
+from django.core.exceptions import ImproperlyConfigured
 from decouple import config
 import dj_database_url
 
@@ -335,6 +336,17 @@ REDIS_URL = (
     or config('REDIS_PUBLIC_URL', default='')
     or None
 )
+
+IS_PRODUCTION_RUNTIME = (not DEBUG) or bool(config('RAILWAY_ENVIRONMENT', default=None))
+ALLOW_INMEMORY_CHANNEL_LAYER = config('ALLOW_INMEMORY_CHANNEL_LAYER', default=False, cast=bool)
+MANAGEMENT_COMMANDS_ALLOWLIST = {'check', 'makemigrations', 'migrate', 'collectstatic', 'shell', 'test'}
+IS_MANAGEMENT_COMMAND = len(sys.argv) > 1 and sys.argv[1] in MANAGEMENT_COMMANDS_ALLOWLIST
+
+if IS_PRODUCTION_RUNTIME and not IS_MANAGEMENT_COMMAND and not REDIS_URL and not ALLOW_INMEMORY_CHANNEL_LAYER:
+    raise ImproperlyConfigured(
+        'Redis is required for Channels in production. Set REDIS_URL (or REDIS_PRIVATE_URL/REDIS_PUBLIC_URL). '
+        'Use ALLOW_INMEMORY_CHANNEL_LAYER=true only for temporary emergency diagnostics.'
+    )
 
 if REDIS_URL:
     # Use Redis when REDIS_URL is provided
