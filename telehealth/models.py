@@ -7,6 +7,7 @@ HIPAA-compliant telehealth session management.
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+import uuid
 
 
 class TelehealthSession(models.Model):
@@ -70,6 +71,12 @@ class TelehealthSession(models.Model):
             models.Index(fields=['therapist', 'status']),
             models.Index(fields=['scheduled_at']),
         ]
+
+    def save(self, *args, **kwargs):
+        """Automatically generate room_id if missing."""
+        if not self.room_id:
+            self.room_id = str(uuid.uuid4())
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} - {self.scheduled_at}"

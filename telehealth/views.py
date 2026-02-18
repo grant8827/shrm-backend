@@ -43,6 +43,16 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
             return TelehealthSessionCreateSerializer
         return TelehealthSessionSerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        """Get session details, ensuring room_id exists."""
+        instance = self.get_object()
+        if not instance.room_id:
+            import uuid
+            instance.room_id = str(uuid.uuid4())
+            instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
     def get_queryset(self):
         """Filter sessions based on user role and query parameters."""
         user = self.request.user
