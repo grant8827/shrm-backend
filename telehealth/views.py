@@ -360,73 +360,29 @@ class TelehealthSessionViewSet(viewsets.ModelViewSet):
             session_url=f"{settings.FRONTEND_URL}/telehealth/join/{room_id}",
         )
         
-        # Send email asynchronously in a separate thread to avoid timeout
-        def send_email_async():
-            try:
-                print("=" * 80)
-                print(f"[EMAIL DEBUG] RECIPIENT EMAIL: {recipient_email}")
-                print(f"[EMAIL DEBUG] FROM EMAIL: {settings.DEFAULT_FROM_EMAIL}")
-                print(f"[EMAIL DEBUG] Session URL: {session.session_url}")
-                print(f"[EMAIL DEBUG] Email settings - Host: {settings.EMAIL_HOST}, Port: {settings.EMAIL_PORT}")
-                print(f"[EMAIL DEBUG] Email settings - USE_SSL: {settings.EMAIL_USE_SSL}, USE_TLS: {settings.EMAIL_USE_TLS}")
-                print("=" * 80)
-                
-                email_context = {
-                    'patient_name': patient_name,
-                    'therapist_name': f"{request.user.first_name} {request.user.last_name}",
-                    'session_url': session.session_url,
-                    'room_id': room_id
+        # Send email asynchronously via Celery
+        try:
+            from .tasks import send_emergency_session_email
+            send_emergency_session_email.delay(
+                patient_name=patient_name,
+                therapist_name=f"{request.user.first_name} {request.user.last_name}",
+                recipient_email=recipient_email,
+                session_url=session.session_url,
+                room_id=room_id,
+                session_id=str(session.id)
+            )
+        except Exception as e:
+            logger.error(
+                f"Failed to queue emergency session email task: {str(e)}",
+                extra={
+                    'event_type': 'emergency_session_email_failed_to_queue',
+                    'session_id': str(session.id),
+                    'patient_email': recipient_email,
+                    'error': str(e),
+                    'timestamp': timezone.now().isoformat(),
                 }
-                
-                email_body = render_to_string('emails/emergency_session.html', email_context)
-                
-                print(f"[EMAIL DEBUG] About to call send_mail with:")
-                print(f"[EMAIL DEBUG]   TO: {recipient_email}")
-                print(f"[EMAIL DEBUG]   FROM: {settings.DEFAULT_FROM_EMAIL}")
-                
-                result = send_mail(
-                    subject='Emergency Telehealth Session - Join Now',
-                    message=f"You have an emergency telehealth session. Join here: {session.session_url}",
-                    html_message=email_body,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[recipient_email],
-                    fail_silently=False,
-                )
-                
-                print(f"[EMAIL DEBUG] ✅ Email sent successfully! Result: {result}")
-                print(f"[EMAIL DEBUG] Check inbox at: {recipient_email}")
-                
-                logger.info(
-                    'Emergency session email sent successfully',
-                    extra={
-                        'event_type': 'emergency_session_email_sent',
-                        'session_id': str(session.id),
-                        'patient_email': recipient_email,
-                        'email_result': result,
-                        'timestamp': timezone.now().isoformat(),
-                    }
-                )
-            except Exception as e:
-                print(f"[EMAIL DEBUG] FAILED to send email: {type(e).__name__}: {str(e)}")
-                import traceback
-                traceback.print_exc()
-                
-                logger.error(
-                    f"Failed to send emergency session email: {str(e)}",
-                    extra={
-                        'event_type': 'emergency_session_email_failed',
-                        'session_id': str(session.id),
-                        'patient_email': recipient_email,
-                        'error': str(e),
-                        'timestamp': timezone.now().isoformat(),
-                    }
-                )
-        
-        # Start email sending in background thread
-        email_thread = threading.Thread(target=send_email_async)
-        email_thread.daemon = True
-        email_thread.start()
-        
+            )
+
         # Log session creation
         logger.info(
             'Emergency session created',
