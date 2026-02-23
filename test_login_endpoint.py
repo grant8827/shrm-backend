@@ -13,10 +13,7 @@ print("TESTING LOGIN ENDPOINT")
 print("=" * 80)
 
 # Login credentials
-credentials = {
-    "username": "grant8827",
-    "password": "AdminPass123!"
-}
+credentials = {"username": "grant8827", "password": "AdminPass123!"}
 
 print(f"\nBackend URL: {backend_url}")
 print(f"Credentials: {json.dumps(credentials, indent=2)}")
@@ -26,12 +23,12 @@ try:
     response = requests.post(
         f"{backend_url}/api/auth/login/",
         json=credentials,
-        headers={'Content-Type': 'application/json'}
+        headers={"Content-Type": "application/json"},
     )
-    
+
     print(f"\nResponse Status Code: {response.status_code}")
     print(f"Response Headers: {dict(response.headers)}")
-    
+
     if response.status_code == 200:
         print("\n✓ LOGIN SUCCESSFUL!")
         data = response.json()
@@ -40,8 +37,9 @@ try:
     else:
         print(f"\n✗ LOGIN FAILED!")
         print(f"Response: {response.text}")
-        
+
 except Exception as e:
     print(f"\n✗ ERROR: {e}")
     import traceback
+
     traceback.print_exc()

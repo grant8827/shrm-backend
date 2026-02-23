@@ -10,7 +10,7 @@ import sys
 
 # Setup Django
 sys.path.insert(0, os.path.dirname(__file__))
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'theracare.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "theracare.settings")
 django.setup()
 
 from users.models import User
@@ -26,7 +26,7 @@ print("-" * 60)
 all_users = User.objects.all()
 print(f"Total users in database: {all_users.count()}")
 
-admin_therapist_users = User.objects.filter(role__in=['admin', 'therapist'])
+admin_therapist_users = User.objects.filter(role__in=["admin", "therapist"])
 print(f"Admin/Therapist users: {admin_therapist_users.count()}")
 
 for user in admin_therapist_users:
@@ -51,8 +51,8 @@ print("Frontend should receive array like:")
 frontend_data = []
 for user_data in data:
     frontend_user = {
-        'id': user_data.get('id'),
-        'name': user_data.get('full_name') or user_data.get('username') or 'Unknown'
+        "id": user_data.get("id"),
+        "name": user_data.get("full_name") or user_data.get("username") or "Unknown",
     }
     frontend_data.append(frontend_user)
     print(f"  {{ id: '{frontend_user['id']}', name: '{frontend_user['name']}' }}")
@@ -61,7 +61,9 @@ print("\n" + "=" * 60)
 print("SUMMARY")
 print("=" * 60)
 if len(frontend_data) > 0:
-    print(f"✅ SUCCESS: {len(frontend_data)} therapist(s)/admin(s) should appear in dropdown")
+    print(
+        f"✅ SUCCESS: {len(frontend_data)} therapist(s)/admin(s) should appear in dropdown"
+    )
     print("   If dropdown is still empty, check:")
     print("   1. Browser console (F12) for errors")
     print("   2. Are you logged in as admin?")

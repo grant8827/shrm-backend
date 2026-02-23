@@ -20,17 +20,17 @@ test_cases = [
 for i, credentials in enumerate(test_cases, 1):
     print(f"\n--- Test Case {i} ---")
     print(f"Credentials: {json.dumps(credentials, indent=2)}")
-    
+
     try:
         response = requests.post(
             f"{backend_url}/api/auth/login/",
             json=credentials,
-            headers={'Content-Type': 'application/json'},
-            timeout=10
+            headers={"Content-Type": "application/json"},
+            timeout=10,
         )
-        
+
         print(f"Status Code: {response.status_code}")
-        
+
         if response.status_code == 200:
             print("✓ SUCCESS!")
             data = response.json()
@@ -39,7 +39,7 @@ for i, credentials in enumerate(test_cases, 1):
         else:
             print(f"✗ FAILED")
             print(f"Response: {response.text}")
-            
+
     except Exception as e:
         print(f"✗ ERROR: {e}")
 

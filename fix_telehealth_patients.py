@@ -1,7 +1,7 @@
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'theracare.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "theracare.settings")
 django.setup()
 
 from telehealth.models import TelehealthSession
@@ -18,13 +18,15 @@ for session in broken_sessions:
     appointment = Appointment.objects.filter(
         therapist=session.therapist,
         start_datetime=session.scheduled_at,
-        is_telehealth=True
+        is_telehealth=True,
     ).first()
-    
+
     if appointment and appointment.patient:
         session.patient = appointment.patient
         session.save()
-        print(f"Fixed session {session.id}: Added patient {appointment.patient.get_full_name()}")
+        print(
+            f"Fixed session {session.id}: Added patient {appointment.patient.get_full_name()}"
+        )
         fixed_count += 1
     else:
         print(f"Could not fix session {session.id}: No matching appointment found")

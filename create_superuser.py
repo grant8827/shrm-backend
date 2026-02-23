@@ -6,7 +6,7 @@ import os
 import django
 import getpass
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'theracare.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "theracare.settings")
 django.setup()
 
 from users.models import User
@@ -32,13 +32,13 @@ try:
     if User.objects.filter(username=username).exists():
         print(f"\n✗ User with username '{username}' already exists!")
         update = input("Update existing user? (yes/no): ").strip().lower()
-        if update == 'yes':
+        if update == "yes":
             user = User.objects.get(username=username)
             user.email = email
             user.first_name = first_name
             user.last_name = last_name
             user.set_password(password)
-            user.role = 'admin'
+            user.role = "admin"
             user.is_staff = True
             user.is_superuser = True
             user.is_active = True
@@ -54,13 +54,13 @@ try:
             password=password,
             first_name=first_name,
             last_name=last_name,
-            role='admin',
+            role="admin",
             is_staff=True,
             is_superuser=True,
-            is_active=True
+            is_active=True,
         )
         print(f"\n✓ Created superuser: {username}")
-    
+
     print("\n" + "=" * 60)
     print("LOGIN CREDENTIALS")
     print("=" * 60)
@@ -69,8 +69,9 @@ try:
     print(f"Email: {email}")
     print(f"Role: admin")
     print("=" * 60)
-    
+
 except Exception as e:
     print(f"\n✗ Error: {e}")
     import traceback
+
     traceback.print_exc()

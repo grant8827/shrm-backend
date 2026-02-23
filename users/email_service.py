@@ -10,42 +10,42 @@ from .models import RegistrationToken
 import secrets
 import logging
 
-logger = logging.getLogger('theracare.audit')
+logger = logging.getLogger("theracare.audit")
 
 
-def generate_registration_token(email, first_name, last_name, phone_number=''):
+def generate_registration_token(email, first_name, last_name, phone_number=""):
     """Generate a unique registration token"""
     token_value = secrets.token_urlsafe(32)
-    
+
     # Token expires in 7 days
     expires_at = timezone.now() + timedelta(days=7)
-    
+
     token = RegistrationToken.objects.create(
         token=token_value,
         email=email,
         first_name=first_name,
         last_name=last_name,
         phone_number=phone_number,
-        expires_at=expires_at
+        expires_at=expires_at,
     )
-    
+
     return token
 
 
-def send_registration_email(email, first_name, last_name, phone_number=''):
+def send_registration_email(email, first_name, last_name, phone_number=""):
     """Send welcome email with registration completion link"""
-    
+
     try:
         # Generate token
         token = generate_registration_token(email, first_name, last_name, phone_number)
-        
+
         # Build registration URL
-        frontend_url = getattr(settings, 'FRONTEND_URL', 'http://localhost:3000')
+        frontend_url = getattr(settings, "FRONTEND_URL", "http://localhost:3000")
         registration_url = f"{frontend_url}/complete-registration/{token.token}"
-        
+
         # Email subject and message
-        subject = 'Welcome to Safe Haven - Complete Your Registration'
-        
+        subject = "Welcome to Safe Haven - Complete Your Registration"
+
         message = f"""
 Dear {first_name} {last_name},
 
@@ -73,7 +73,7 @@ The Safe Haven Team
 This is an automated message. Please do not reply to this email.
 If you did not request this registration, please disregard this message.
 """
-        
+
         html_message = f"""
 <!DOCTYPE html>
 <html>
@@ -136,7 +136,7 @@ If you did not request this registration, please disregard this message.
 </body>
 </html>
 """
-        
+
         # Send email
         send_mail(
             subject=subject,
@@ -146,28 +146,28 @@ If you did not request this registration, please disregard this message.
             html_message=html_message,
             fail_silently=False,
         )
-        
+
         logger.info(
-            'Registration email sent',
+            "Registration email sent",
             extra={
-                'event_type': 'registration_email_sent',
-                'email': email,
-                'token_id': str(token.id),
-                'expires_at': token.expires_at.isoformat(),
-                'timestamp': timezone.now().isoformat(),
-            }
+                "event_type": "registration_email_sent",
+                "email": email,
+                "token_id": str(token.id),
+                "expires_at": token.expires_at.isoformat(),
+                "timestamp": timezone.now().isoformat(),
+            },
         )
-        
+
         return True, token
-        
+
     except Exception as e:
         logger.error(
-            f'Failed to send registration email: {str(e)}',
+            f"Failed to send registration email: {str(e)}",
             extra={
-                'event_type': 'registration_email_failed',
-                'email': email,
-                'error': str(e),
-                'timestamp': timezone.now().isoformat(),
-            }
+                "event_type": "registration_email_failed",
+                "email": email,
+                "error": str(e),
+                "timestamp": timezone.now().isoformat(),
+            },
         )
         return False, None

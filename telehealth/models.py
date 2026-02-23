@@ -14,49 +14,56 @@ class TelehealthSession(models.Model):
     """
     Telehealth session model for video consultations.
     """
+
     STATUS_CHOICES = [
-        ('scheduled', 'Scheduled'),
-        ('in-progress', 'In Progress'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
+        ("scheduled", "Scheduled"),
+        ("in-progress", "In Progress"),
+        ("completed", "Completed"),
+        ("cancelled", "Cancelled"),
     ]
 
     # Use AutoField since the existing table has an integer id
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    
+
     # Participants
     patient = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='patient_sessions',
+        related_name="patient_sessions",
         null=True,
-        blank=True
+        blank=True,
     )
     therapist = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='therapist_sessions'
+        related_name="therapist_sessions",
     )
-    
+
     # Scheduling
     scheduled_at = models.DateTimeField()
     duration = models.IntegerField(help_text="Duration in minutes", default=30)
-    
+
     # Session details
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
-    is_emergency = models.BooleanField(default=False, help_text="Whether this is an emergency session")
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default="scheduled"
+    )
+    is_emergency = models.BooleanField(
+        default=False, help_text="Whether this is an emergency session"
+    )
     session_url = models.URLField(blank=True, null=True, help_text="Video call URL")
-    room_id = models.CharField(max_length=255, blank=True, null=True, help_text="Video room ID")
-    
+    room_id = models.CharField(
+        max_length=255, blank=True, null=True, help_text="Video room ID"
+    )
+
     # Session content
     notes = models.TextField(blank=True, null=True, help_text="Session notes")
     has_recording = models.BooleanField(default=False)
     has_transcript = models.BooleanField(default=False)
     recording_url = models.URLField(blank=True, null=True)
     transcript_url = models.URLField(blank=True, null=True)
-    
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -64,12 +71,12 @@ class TelehealthSession(models.Model):
     ended_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        db_table = 'telehealth_session'
-        ordering = ['-scheduled_at']
+        db_table = "telehealth_session"
+        ordering = ["-scheduled_at"]
         indexes = [
-            models.Index(fields=['patient', 'status']),
-            models.Index(fields=['therapist', 'status']),
-            models.Index(fields=['scheduled_at']),
+            models.Index(fields=["patient", "status"]),
+            models.Index(fields=["therapist", "status"]),
+            models.Index(fields=["scheduled_at"]),
         ]
 
     def save(self, *args, **kwargs):
@@ -84,7 +91,7 @@ class TelehealthSession(models.Model):
     @property
     def is_upcoming(self):
         """Check if session is upcoming."""
-        return self.scheduled_at > timezone.now() and self.status == 'scheduled'
+        return self.scheduled_at > timezone.now() and self.status == "scheduled"
 
     @property
     def is_past(self):
@@ -104,37 +111,35 @@ class TelehealthTranscript(models.Model):
     """Persisted transcript for a telehealth session."""
 
     session = models.OneToOneField(
-        TelehealthSession,
-        on_delete=models.CASCADE,
-        related_name='transcript_record'
+        TelehealthSession, on_delete=models.CASCADE, related_name="transcript_record"
     )
     patient = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='telehealth_transcripts_as_patient',
+        related_name="telehealth_transcripts_as_patient",
         null=True,
-        blank=True
+        blank=True,
     )
     therapist = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='telehealth_transcripts_as_therapist'
+        related_name="telehealth_transcripts_as_therapist",
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='telehealth_transcripts_created'
+        related_name="telehealth_transcripts_created",
     )
     transcript = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'telehealth_transcript'
-        ordering = ['-created_at']
+        db_table = "telehealth_transcript"
+        ordering = ["-created_at"]
         indexes = [
-            models.Index(fields=['therapist', 'created_at']),
-            models.Index(fields=['patient', 'created_at']),
+            models.Index(fields=["therapist", "created_at"]),
+            models.Index(fields=["patient", "created_at"]),
         ]
 
     def __str__(self):

@@ -2,6 +2,8 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.core.cache import cache
 from asgiref.sync import sync_to_async
+from datetime import datetime
+
 
 class VideoCallConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -16,10 +18,13 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
         # Update participant list in cache
         participants = await sync_to_async(cache.get)(self.room_participants_key, set())
         participants.add(self.channel_name)
-        await sync_to_async(cache.set)(self.room_participants_key, participants, timeout=86400) # 24h timeout
+        await sync_to_async(cache.set)(
+            self.room_participants_key, participants, timeout=86400  # 24h timeout
+        )
 
         print(
-            f"[WS] Participant connected to {self.room_group_name}, total: {len(participants)}"
+            f"[WS] Participant connected to {self.room_group_name}, "
+            f"total: {len(participants)}"
         )
 
     async def disconnect(self, close_code):
@@ -31,7 +36,7 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
 
         # Leave room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-        
+
         # Remove from participant tracking
         participants = await sync_to_async(cache.get)(self.room_participants_key, set())
         if self.channel_name in participants:
@@ -39,7 +44,9 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
             if len(participants) == 0:
                 await sync_to_async(cache.delete)(self.room_participants_key)
             else:
-                await sync_to_async(cache.set)(self.room_participants_key, participants, timeout=86400)
+                await sync_to_async(cache.set)(
+                    self.room_participants_key, participants, timeout=86400
+                )
 
         print(f"[WS] Participant disconnected from {self.room_group_name}")
 
@@ -48,6 +55,9 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
         message_type = data.get("type")
 
         print(f"[WS] Received message type: {message_type}")
+
+        # Add server-side timestamp
+        data['timestamp'] = datetime.now().isoformat()
 
         # Handle participant joined notification
         if message_type == "participant_joined":
